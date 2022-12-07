@@ -1,3 +1,7 @@
 from django.contrib import admin
+from mypep.models import ProfileModel,AuthModel
 
-# Register your models here.
+
+admin.site.register(ProfileModel)
+admin.site.register(AuthModel)
+
