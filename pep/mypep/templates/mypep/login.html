@@ -1,0 +1,14 @@
+<div class="header-bar">
+    <h1>Login</h1>
+</div>
+
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class="button" type="submit" value="Login">
+    </form>
+    <a href = "{% url 'mypep:password_reset' %}">Forgot Password</a>
+    <p>Don't have an account? <a href="{% url 'mypep:signup' %}">Sign Up</a></p>
+    <a href = "{% url 'mypep:base' %}">Home</a>
+</div>

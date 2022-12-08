@@ -1,0 +1,8 @@
+<h1>Hello World</h1>
+{% if request.user.is_authenticated %}
+<p>Logged in as - {{ request.user }}</p>
+<a href = "{% url 'mypep:logout' %}">Logout</a>
+{% else %}
+<h2>Please Login To Continue</h2>
+<a href = "{% url 'mypep:login' %}">Login</a>
+{% endif %}
