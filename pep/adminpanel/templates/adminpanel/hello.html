@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+    {% load static %}
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
+    <style>
+        .collapse{
+            display : inline-flex
+        }
+        #drop{
+            margin-left: 0px;
+        }
+
+    </style>
+
+  </head>
+  <body>
+    
+    <nav class="navbar navbar-expand-lg bg-dark ">
+        <div class="container-fluid">
+          <a class="navbar-brand text-light" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-light" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Link</a>
+              </li>
+              
+            </ul>
+            
+
+            <div class = "d-flex">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="#">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="#">Documentation</a>
+                    </li>
+                    <i class="fa-regular fa-envelope"></i>
+                    <i class="fa-solid fa-envelope"></i>
+                    <i class="bi bi-person-circle"></i>
+                    <i class="fa-regular fa-user"></i>
+                    <li class="nav-item">
+                        <i class="fa-regular fa-user"></i>
+                        <i class="bi bi-person-circle"></i>
+                        <i class="fa-regular fa-envelope"></i>
+                        <i class="fa-solid fa-envelope"></i>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+    <section>
+        <div class="row">
+            <div class = "col-sm-2">
+                <h4 class="mt-5 mx-3">Interface</h4>
+                <ul class="mt-4">
+                    
+                    <span class ="fw-bold my-3 mx-3">Overview</span>
+                    <li class="my-3 mx-3">
+                        <a class="nav nav-link text-dark" id ="drop" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Dashboards
+                            
+                        </a>
+                        
+                        <div class="collapse" id="collapseExample">
+                            <div>
+                                <ul class = "navbar-nav ps-3">
+                                    <li class="my-3">
+                                        <span >Actions</span>
+                                    </li>
+                                    <li class="my-3">
+                                        <span class="ms-auto">Default</span>
+                                    </li>
+                                    <li class="my-3">
+                                        <span>Analytics</span>
+                                    </li>
+                                </ul>
+                              
+                            </div>
+                        </div>
+                    </li>
+
+
+                    <li class="my-3 mx-3">
+                        <a class="nav nav-link text-dark" id ="drop1" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
+                            Layouts
+                        </a>
+                        <div class="collapse" id="collapseExample1">
+                            <div>
+                                <ul class = "navbar-nav ps-3">
+                                    <li class="my-3">
+                                        <span >Dark Theme</span>
+                                    </li>
+                                    <li class="my-3">
+                                        <span class="ms-auto">Light Theme</span>
+                                    </li>
+                                    <li class="my-3">
+                                        <span>Default</span>
+                                    </li>
+                                </ul>
+                          
+                            </div>
+                        </div>
+                    </li>
+
+
+                    <li class="my-3 mx-3">
+                        <a class="nav nav-link text-dark" id ="drop2" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
+                            Pages
+                        </a>
+                        <div class="collapse" id="collapseExample2">
+                            <div>
+                                <ul class = "navbar-nav ps-3">
+                                    <li class="my-3">
+                                        <span >Account</span>
+                                    </li>
+                                    <li class="my-3">
+                                        <span class="ms-auto">Authentication</span>
+                                    </li>
+                                    <li class="my-3">
+                                        <span>Prices</span>
+                                    </li>
+                                </ul>
+                          
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                
+
+                <h4 class="mt-5 mx-3">UI Toolkits</h4>
+                <ul class="mt-4">
+                    <li class="my-3 mx-3">Components</li>
+                    <li class="my-3 mx-3">Content</li>
+                    <li class="my-3 mx-3">Forms</li>
+                    <li class="my-3 mx-3">Utilities</li>
+                </ul>
+
+                <h4 class="mt-5 mx-3">Plugins</h4>
+                <ul class="mt-4">
+                    <li class="my-3 mx-3">Charts</li>
+                    <li class="my-3 mx-3">Code Blocks</li>
+                    <li class="my-3 mx-3">Data Tables</li>
+                    <li class="my-3 mx-3">Data Picker</li>
+                </ul>
+
+            </div>
+
+
+            <div class = "col-md-9">
+                <div class="row ">
+                    <div class = "col-sm-6 ">
+                        <div class ="container-xl-p-5 ms-2">
+                            <h2 class ="display-6 fw-bold mb-0 mt-5">Dashboard</h2>
+                            <p class =" text-muted"> Sales overview and Summary</p>
+                        </div>
+                    </div>
+                    
+                
+                    <div class = "col-sm-6 mt-5 d-flex justify-content-end">
+                        <div class="dropdown p-1">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            View by
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>
+
+
+                        <div class="dropdown p-1">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sales From
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row gx-5">
+                    <div class="col sm-3 mb-5">
+                        <div class ="card card-raised h-100 ">
+                            <div class ="card-body ">
+                                <h4 id ='userajax'></h4>
+                                <p>Active Users</p>
+                                <div class ="row d-flex ">
+                                    <p class="text-muted"> <i class="fa-solid fa-arrow-up"></i> 3% from last month </p>
+                                    {% comment %} <i class="fa-solid fa-download"></i> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col sm-3 mb-5">
+                        <div class ="card card-raised h-100 mb-4">
+                            <div class ="card-body">
+                                <h4 id="super"></h4>
+                                <p>Super User</p>
+                                <div class ="row d-flex ">
+                                    <p class="text-muted"> <i class="fa-solid fa-arrow-up"></i> 3% from last month </p>
+                                    {% comment %} <i class="fa-solid fa-download"></i> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col sm-3 mb-5">
+                        <div class ="card card-raised h-100 mb-4">
+                            <div class ="card-body">
+                                <h4 id ="normal"></h4>
+                                <p>Normal Users</p>
+                                <div class ="row d-flex ">
+                                    <p class="text-muted"> <i class="fa-solid fa-arrow-up"></i> 3% from last month </p>
+                                    {% comment %} <i class="fa-solid fa-download"></i> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col md-3 mb-5">
+                        <div class ="card card-raised h-100 mb-4">
+                            <div class ="card-body">
+                                <h4>7</h4>
+                                <p>Channels</p>
+                                <div class ="row d-flex ">
+                                    <p class="text-muted"> <i class="fa-solid fa-arrow-up"></i> 3% from last month </p>
+                                    {% comment %} <i class="fa-solid fa-download"></i> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class ="row gx-5">
+                    <div class ="col-lg-8 mb-5">
+                        <div class ="card card-raised h-100">
+                            <div class ="card-header ">
+                                <div class ="d-flex justify-content-between align-items-center">
+                                    <div class="me-4">
+                                        <h2 class ="card-title mb-1">Revenue Breakdown</h2>
+                                        <div class="card-subtitle text-muted">Compared to Previous Year</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class ="card-body ">
+                                <div class= "row">
+                                    <div class="d-flex flex-column col-sm-6">
+                                        <p class="mt-3">Actual Revenue</p>
+                                        <h3>$59,482</h3>
+                                        <p class="mt-3">Revenue Target</p>
+                                        <h3>$50,000</h3>
+                                        <p class="mt-3 text-success">Goal</p>
+                                        <h3 class ="text-success">119%</h3>
+                                    </div>
+
+
+                                    <div class="d-flex flex-column col-sm-6">
+                                        <div id="myfirstchart" style="height: 250px;"></div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class ="card-footer px-4 d-flex justify-content-end text-primary">
+                                <a href="#" class ="fw-bold text-decoration-none">OPEN REPORT --></a>
+                            </div>
+                        </div>
+
+                        
+                            
+                        
+                    </div>
+
+                    <div class="col-md-4 mb-5">
+                        <div class ="card card-raised h-100">
+                            <div class ="card-header px-4">
+                                <div class ="d-flex justify-content-between align-items-center">
+                                    <div class="me-4">
+                                        <h2 class ="card-title mb-1">Segments</h2>
+                                        <div class="card-subtitle text-muted">Revenue Sources</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class ="d-flex justify-content-center">
+                                    <div id="myChart">
+                                        {% comment %} <canvas id="myChart"></canvas> {% endcomment %}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class ="card-footer px-4 d-flex justify-content-end text-primary">
+                                <a href="#" class ="fw-bold text-decoration-none">OPEN REPORT --></a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                    
+                        
+                    
+                </div>
+
+                <div class ="row gx-5">
+                    <div class ="col -md-4 px-3">
+                        <div class ="card card-raised h-100">
+                            <div class="card-body">
+                                <h3>Privacy Suggestions</h3>
+                                <p class="fs-5">Take our privacy checkup to choose which setings are right for you</p>  
+                                <i class="fa-solid fa-lock fs-5 fw-bold"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class ="col -md-4 px-3">
+                        <div class ="card card-raised h-100">
+                            <div class="card-body">
+                                <h3>Account Storage</h3>
+                                <p class="fs-5">Your account storage is shared across all devices</p> 
+                                <i class="fa-solid fa-file-invoice fs-5 fw-bold"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <i class="fa-brands fa-user-chef"></i> <!-- uses solid style -->
+        <i class="fa-brands fa-github-square"></i> <!-- uses brand style -->
+        <i class="fa-solid fa-tricycle"></i>
+        <i class="fa-thin fa-tricycle"></i>
+        <i class="fa-brands fa-square-facebook"></i>
+        <i class="fa-thin fa-arrow-right"></i>
+        <i class="fa-thin fa-envelope"></i>
+
+        <i class="fa-regular fa-envelope"></i>
+        <i class="fa-solid fa-envelope"></i>
+
+
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
+    <script src="jquery-3.6.1.min.js"></script>
+
+    <script src="./js/dataTables.bootstrap5.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/12bf2cfdb8.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    
+    <script>
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'myfirstchart',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+              { year: '2008', value: 20 },
+              { year: '2009', value: 10 },
+              { year: '2010', value: 5 },
+              { year: '2011', value: 5 },
+              { year: '2012', value: 20 }
+            ],
+            // The name of the data record attribute that contains x-values.
+            xkey: 'year',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['value'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['Value']
+          });
+
+    
+          const ctx = document.getElementById('myChart');
+
+
+           {% comment %} new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1
+            }]
+            },
+            options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+            }
+        });  {% endcomment %}
+
+
+
+        $(document).ready(function(){
+                $.ajax({
+                    type:'GET',
+                    url:"{% url 'adminpanel:adminn' %}",
+                    success : function(data){
+                        console.log(data);
+                        
+                        $('#userajax').html(data);
+                    },
+                    error: function(data){
+                        alert("NO DATA FOUND");
+                    }
+                })
+        });
+
+        $(document).ready(function(){
+            $.ajax({
+                type:'GET',
+                url:"{% url 'adminpanel:ad' %}",
+                success : function(data){
+                    console.log(data);
+
+                    $('#super').html(data)
+                },
+                error: function(data){
+                    alert("NO DATA FOUND");
+                }
+            })
+        });
+
+
+        $(document).ready(function(){
+            $.ajax({
+                type:'GET',
+                url:"{% url 'adminpanel:normaluser' %}",
+                success : function(data){
+                    console.log(data);
+
+                    $('#normal').html(data)
+                },
+                error: function(data){
+                    alert("NO DATA FOUND");
+                }
+            })
+        });
+
+    </script>
+
+
+   </body>
+ </html>
