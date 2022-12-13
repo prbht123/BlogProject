@@ -41,6 +41,7 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
@@ -72,10 +73,11 @@
                         <i class="fa-solid fa-envelope"></i>
                     </li>
                 </ul>
+                
             </div>
           </div>
         </div>
-      </nav>
+    </nav>
 
 
     <section>
@@ -86,7 +88,11 @@
                     
                     <span class ="fw-bold my-3 mx-3">Overview</span>
                     <li class="my-3 mx-3">
-                        <a class="nav nav-link text-dark" id ="drop" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+
+                        <a class="nav nav-link text-dark" href ="{% url 'adminpanel:userstatus' %}">User Status</a>
+
+
+                        {% comment %} <a class="nav nav-link text-dark" id ="drop" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                             Dashboards
                             
                         </a>
@@ -106,7 +112,8 @@
                                 </ul>
                               
                             </div>
-                        </div>
+                        </div> {% endcomment %}
+
                     </li>
 
 
@@ -114,7 +121,8 @@
                         <a class="nav nav-link text-dark" id ="drop1" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
                             Layouts
                         </a>
-                        <div class="collapse" id="collapseExample1">
+
+                        {% comment %} <div class="collapse" id="collapseExample1">
                             <div>
                                 <ul class = "navbar-nav ps-3">
                                     <li class="my-3">
@@ -129,7 +137,8 @@
                                 </ul>
                           
                             </div>
-                        </div>
+                        </div> {% endcomment %}
+
                     </li>
 
 
@@ -137,7 +146,8 @@
                         <a class="nav nav-link text-dark" id ="drop2" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
                             Pages
                         </a>
-                        <div class="collapse" id="collapseExample2">
+
+                        {% comment %} <div class="collapse" id="collapseExample2">
                             <div>
                                 <ul class = "navbar-nav ps-3">
                                     <li class="my-3">
@@ -152,7 +162,8 @@
                                 </ul>
                           
                             </div>
-                        </div>
+                        </div> {% endcomment %}
+
                     </li>
                 </ul>
 

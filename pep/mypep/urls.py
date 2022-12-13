@@ -13,8 +13,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='mypep:login'), name='logout'),
 
     path('update/<int:pk>', ProfileUpdate.as_view(), name='update'),
-    # path('detail/', ProfileDetail.as_view(), name='detail'),
+
     path('detail/', MyDetailView.as_view(), name='detail'),
+
 
     path('change/', pep_views.PasswordChangeView.as_view(template_name="mypep/password_change_form.html",
                                                           success_url=reverse_lazy('mypep:password_change_done')), name='password_change'),
