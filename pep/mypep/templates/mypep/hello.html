@@ -1,8 +1,31 @@
-<h1>Hello World</h1>
-{% if request.user.is_authenticated %}
-<p>Logged in as - {{ request.user }}</p>
-<a href = "{% url 'mypep:logout' %}">Logout</a>
-{% else %}
-<h2>Please Login To Continue</h2>
-<a href = "{% url 'mypep:login' %}">Login</a>
-{% endif %}
+{% extends 'mypep/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class ="d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
+        <div class="card text-center mt-5 bg-warning" style="width: 300px;">
+            <h1>Hello</h1><hr>
+
+            {% if request.user.is_authenticated %}
+            
+            <p class="fw-bold fs-4">Logged in as - {{ request.user }}</p>
+
+            <div class ="mb-4 fs-4">
+                <a class="btn btn-primary" href = "{% url 'mypep:logout' %}">LOGOUT</a>
+            </div>
+
+            {% else %}
+
+            <h2>Please Login To Continue</h2>
+
+            <div class ="mb-4 fs-4">
+                <a class="btn btn-primary" href = "{% url 'mypep:login' %}">Login</a>
+            </div>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

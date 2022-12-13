@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView
+from django.views.generic.edit import CreateView,UpdateView
+from django.views.generic.detail import DetailView
 from django.views import View
 from django.urls import reverse_lazy
 from mypep.forms import SignUpForm
+from mypep.models import ProfileModel
 
 
 class UserLogin(LoginView):
@@ -46,3 +48,28 @@ class MyView(View):
         Function to render home page
         """
         return render(request, 'mypep/hello.html')
+
+
+class ProfileUpdate(UpdateView):
+    model = ProfileModel
+    fields = '__all__'
+    template_name='mypep/profilemodel_update.html'
+
+    pk_url_kwarg = 'pk'
+    success_url = reverse_lazy('mypep:base')
+
+
+class ProfileDetail(DetailView):
+    model = 'ProfileModel'
+    fields = '__all__'
+
+
+class MyDetailView(View):
+    """
+    Home page view
+    """
+    def get(self, request):
+        """
+        Function to render home page
+        """
+        return render(request, 'mypep/profilemodel_detail.html')
