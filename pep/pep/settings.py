@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "adminpanel",
+    "blogapp",
     "fontawesomefree"
 ]
 
@@ -58,6 +59,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = "pep.urls"
 
 LOGIN_REDIRECT_URL = ('..')
+
+LOGIN_URL = '/mypep/login'
 
 TEMPLATES = [
     {
