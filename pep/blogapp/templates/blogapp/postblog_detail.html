@@ -1,0 +1,29 @@
+{% extends 'mypep/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container d-flex justify-content-center">
+    <div class="card my-4">
+        <div class="card-header bg-primary text-white text-center fs-4 fw-bold">Blog Details</div>
+        <div class="card-body">
+            <h1>Title - {{ object.title }}</h1>
+
+            <h3>Content - {{ object.content }}</h3>
+            <h3>Image - {{ object.image }}</h3>
+            <h3>Blogger - {{ object.blogger }}</h3>
+
+            {% for i in postblog.tags.all  %}
+            <h3>Tags - {{ i.name }} </h3>
+            {% endfor %}
+
+            <h3>Category - {{ object.category }}</h3>
+            <h3>Status - {{ object.status }}</h3>
+            <h3>Created At - {{ object.created_at }}</h3>
+            <h3>Updated At - {{ object.updated_at }}</h3>
+            <h3>Published Date - {{ object.published_date }}</h3>
+            <hr>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
