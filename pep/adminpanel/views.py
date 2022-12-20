@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.views.generic.list import ListView
+from blogapp.models import PostBlog
+from blogapp.forms import BlogForm
 
 
 class HomeView(View):
@@ -12,7 +15,47 @@ class HomeView(View):
         """
         Function to render home page
         """
-        return render(request, 'adminpanel/hello.html')
+        if request.user.is_staff:
+            return render(request, 'adminpanel/hello.html')
+        else:
+            return render(request, 'adminpanel/index.html')
+
+
+class IndexView(View):
+    """
+    Home page view
+    """
+    def get(self, request):
+        """
+        Function to render home page
+        """
+        return render(request, 'adminpanel/index.html')
+
+
+class ListBlog(ListView):
+    model = PostBlog
+    form_class = BlogForm
+    template_name = "adminpanel/bloglists.html"
+
+    def choices(self):
+        return PostBlog.objects.filter(status=1)
+
+def published(request, pk):
+    blog = PostBlog.objects.get(id=pk)
+    blog.status = 1
+    blog.save()
+    print(request.POST)
+    print("000000000000011111111111111")
+    return redirect('adminpanel:listblog')
+
+def unpublished(request, pk):
+    blog = PostBlog.objects.get(id=pk)
+    blog.status = 2
+    blog.published_date = None
+    blog.save()
+    print(request.POST)
+    print("000000000000011111111111111")
+    return redirect('adminpanel:listblog')
 
 
 class AdminView(View):
@@ -62,7 +105,10 @@ class MyUserView(View):
         """
         # context = User.objects.all()
         users = User.objects.all()
-        return render(request, 'adminpanel/hey.html', {'users': users})
+        if self.request.user.is_superuser:
+            return render(request, 'adminpanel/hey.html', {'users': users})
+        else:
+            return redirect("/")
 
 
 class MyStatusView(View):
