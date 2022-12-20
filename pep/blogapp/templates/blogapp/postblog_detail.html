@@ -1,29 +1,99 @@
-{% extends 'mypep/base.html' %}
+{% extends 'adminpanel/base.html' %}
 {% load static %}
 {% block content %}
 
-<div class="container d-flex justify-content-center">
-    <div class="card my-4">
-        <div class="card-header bg-primary text-white text-center fs-4 fw-bold">Blog Details</div>
-        <div class="card-body">
-            <h1>Title - {{ object.title }}</h1>
 
-            <h3>Content - {{ object.content }}</h3>
-            <h3>Image - {{ object.image }}</h3>
-            <h3>Blogger - {{ object.blogger }}</h3>
-
-            {% for i in postblog.tags.all  %}
-            <h3>Tags - {{ i.name }} </h3>
-            {% endfor %}
-
-            <h3>Category - {{ object.category }}</h3>
-            <h3>Status - {{ object.status }}</h3>
-            <h3>Created At - {{ object.created_at }}</h3>
-            <h3>Updated At - {{ object.updated_at }}</h3>
-            <h3>Published Date - {{ object.published_date }}</h3>
-            <hr>
+<div class=" bg-dark" id="grad">
+    <div class="container d-flex justify-content-center">
+        <div class="card bg-blur my-4">
+            <div class="card-header bg-dark text-white text-center fs-4 fw-bold">Blog Details</div>
+            <div class="card-body">
+                <hr>
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    
+                    <tr>
+                        <th scope="row">Title</th>
+                        <td>{{ object.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Content</th>
+                        <td>{{ object.content|linebreaks  }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Image</th>
+                        <td colspan="2">{{ object.image.url }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Blogger</th>
+                        <td colspan="2">{{ object.blogger }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Tags</th>
+                        {% for i in object.tags.all  %}
+                        <td colspan="2">{{ i.name }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th scope="row">Category</th>
+                        <td colspan="2">{{ object.category }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td colspan="2">{{ object.get_status_display }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Created At</th>
+                        <td colspan="2">{{ object.created_at }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Updated At</th>
+                        <td colspan="2">{{ object.updated_at }}</td>
+                    </tr>
+                    <tr>
+                        {% if object.status == '1' %}
+                        <th scope="row">Published Date</th>
+                        <td colspan="2">{{ object.published_date }}</td>
+                        {% endif %}
+                    </tr>
+                   
+                    </tbody>
+                </table>
+                {% comment %} <a href = "{% url 'blogapp:update' pk=object.id %}" class="text-decoration-none">Update Blog -->
+                    <br><a href = "{% url 'blogapp:delete' pk=object.id %}" class="text-decoration-none">Delete Blog --> {% endcomment %}
+            </div>
+            <div class="card-footer">
+                {% if request.user == object.blogger or request.user.is_staff %}
+                <a class="text-decoration-none" href="{% url 'blogapp:edit' pk=object.id %}">Update</a>
+                <br>
+                <a class="text-decoration-none" href="{% url 'blogapp:remove' pk=object.id %}">Delete</a>
+                {% endif %}    
+                {% comment %} {% csrf_token%}
+                    {% if request.user.is_superuser %}
+                    <a href="{% url 'blogapp:publish' pk=object.id  %}" class="text-decoration-none">Publish</a>
+                    {% comment %} <input type="submit" name="Published" value="Publish">
+                    {% endif %}
+                    <br>
+                    <a href="{% url 'blogapp:unpublish' pk=object.id  %}" class ="text-decoration-none">UnPublish</a> {% endcomment %}
+                    {% comment %} <input type="submit" name="Unpublished" value="Unpublish"> {% endcomment %}
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    #grad {          
+            background: 
+              repeating-radial-gradient(
+                circle at 0 0, 
+                #2c2b38,
+                #59554b 50px
+              );
+    }
+</style>
+
+
 
 {% endblock %}
