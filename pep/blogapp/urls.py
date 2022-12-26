@@ -1,6 +1,6 @@
 from django.urls import path
 from blogapp import views
-from blogapp.views import Blogging, BlogCreate, PublishView, publish
+from blogapp.views import Blogging, BlogCreate, publish
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -13,12 +13,13 @@ urlpatterns = [
     path('detail/<int:pk>/',views.BlogDetail.as_view(),name='detail'),
     path('delete/<int:pk>/',views.BlogDelete.as_view(),name='delete'),
     path('list/',views.BlogList.as_view(),name='list'),
-    # path('getPublish/',views.PublishView.as_view(),name='publish'),
     path('publish/<int:pk>/', views.publish, name='publish'),
     path('unpublish/<int:pk>/', views.unpublish, name='unpublish'),
     path('remove/<int:pk>/', views.remove, name='remove'),
     path('edit/<int:pk>/', views.edit, name='edit'),
     path('results/', views.SearchView.as_view(), name='search'),
+    path('like/<int:pk>/', views.postLike, name='like'),
+    path('dislike/<int:pk>/', views.postDisLike, name='dislike')
 ]
 
 if settings.DEBUG:

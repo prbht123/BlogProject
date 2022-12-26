@@ -5,26 +5,29 @@ from django.views import View
 from django.views.generic.edit import CreateView,UpdateView,DeleteView,FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from blogcomment.forms import BlogCommentForm
+from blogcomment.models import BlogCommentModel
+from mypep.models import ProfileModel
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 
 
 class Blogging(View):
     """
     Home page view
     """
+    # Function to render home page
     def get(self, request):
-        """
-        Function to render home page
-        """
         return render(request, 'blogapp/home.html')
 
 
 class BlogCreate(LoginRequiredMixin, CreateView):
     """
-    To create blog on filling form
+    To create a blog form
     """
     login_url = '/mypep/login'
     redirect_field_name = 'login'
@@ -33,87 +36,52 @@ class BlogCreate(LoginRequiredMixin, CreateView):
     template_name = "blogapp/postblog_form.html"
     success_url = reverse_lazy('blogapp:create')
 
-    # def get_template_name(self):
-    #     if self.request.user.is_authenticated:
-    #         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2")
-    #         return "blogapp/postblog_form.html"
-    #     else:
-    #         print("################################")
-    #         return redirect('mypep:login')
-
+    # Function if the form is valid
     def form_valid(self, form):
-            """
-            Function to perform operations 
-            """
-            print(self.request.POST)
-            print("__________________________________")
             tag_data = self.request.POST['tagname']
             tagging  = tag_data.split(',')
-
-            # if self.request.POST['category']:
-            #     category_data = BlogCategory.objects.get(id=self.request.POST['category'])
-            #     data.category = category_data
-
-            # print(type(category_data))
-            # print(category_data)
-            # data = form.save(self.request.POST,self.request.FILES,commit=False)
-
             data = form.save(commit=False)
-            # if category_data :
-            #     data.category = category_data
             data.blogger = self.request.user
-
             data.save()
-
             for tag in tagging:
                 try:
                     var = TagBlog.objects.get(name=tag)
                     data.tags.add(var)
                 except:
                     data.tags.create(name=tag)
-
             return redirect('blogapp:create')
 
 
 class BlogUpdate(LoginRequiredMixin, UpdateView):
+    """
+    To update a blog form
+    """
     login_url = '/mypep/login'
     redirect_field_name = 'login'
     model = PostBlog
-    # form_class = BlogForm
     template_name = "blogapp/postblog_update.html"
-    # print(form_class)
-    # print("____________________________________000000000")
 
+    # Function to perform operations if the form is valid
     def form_valid(self, form):
-        # print(self.request.POST)
         tag_data = self.request.POST['tagname']
         tagging  = tag_data.split(' ')
         data = form.save()
-        # print(">.....>>>>>>>>>>>>>>>>.........")
-        # print(tagging)
 
         for tag in tagging:
             try:
                 var = TagBlog.objects.get(name=tag)
                 taggers = data.tags.all()
-                # print(taggers)
                 if var in tagging:
                     continue
                 else:
                     data.tags.add(var)
-
             except:
                 data.tags.create(name=tag)
 
         status_data = self.request.POST['status']
-        print(status_data)
-        # if self.request.user.is_superuser:
-        #     data.status.create(status=status_data)
-        # else:
-        #     return HttpResponse("Access denied")
-
         return redirect('blogapp:create')
 
+    # dispatch function to show particular fields 
     def dispatch(self, request, *args, **kwargs ):
         if request.user.is_superuser:
             self.fields = ['title', 'content', 'image','category','status']
@@ -123,40 +91,89 @@ class BlogUpdate(LoginRequiredMixin, UpdateView):
 
 
 class BlogDetail(DetailView):
+    """
+    class to show blog details
+    """
     model = PostBlog
     form_class = BlogForm
     template_name = "blogapp/postblog_detail.html"
 
-    # def get(self, request, *args, **kwargs):
-    #     option = 
-    #     return render(request, 'blogapp/postblog_detail.html', context)
+    # function to get context data
+    def get_context_data(self,  *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = BlogCommentForm()
+        blog_id = self.kwargs['pk']
+        blog = get_object_or_404(PostBlog, id=self.kwargs['pk'])
+        comments = BlogCommentModel.objects.order_by('-created_at').filter(blogpost=blog_id)[:5]
+        like_number = blog.number_of_likes()
+        like = False
+        if blog.likes.filter(id=self.request.user.id).exists():
+            like = True
+        dislike_number = blog.number_of_dislikes()
+        dislike = False
+        if blog.dislikes.filter(id=self.request.user.id).exists():
+            dislike = True
+        context["comment_list"] = comments
+        context["like_number"] = like_number
+        context["like"] = like
+        context["dislike_number"] = dislike_number
+        context["dislike"] = dislike
+        return context
 
+
+# this function is called if the post is liked
+def postLike(request, pk):
+    blog = PostBlog.objects.get(id=pk)
+
+    if blog.likes.filter(id=request.user.id).exists():
+        blog.likes.remove(request.user)
+    else:
+        if blog.dislikes.filter(id=request.user.id).exists():
+            blog.dislikes.remove(request.user)
+        blog.likes.add(request.user)
+
+    return redirect('blogapp:detail', pk=blog.id)
+
+
+# this function is called if the post is disliked
+def postDisLike(request, pk):
+    blog = PostBlog.objects.get(id=pk)
+    if blog.dislikes.filter(id=request.user.id).exists():
+        blog.dislikes.remove(request.user)
+    else:
+        if blog.likes.filter(id=request.user.id).exists():
+            blog.likes.remove(request.user)
+        blog.dislikes.add(request.user)
+
+    return redirect('blogapp:detail', pk=blog.id)
+
+
+# function to change blog status from draft to publish
 def publish(request, pk):
     blog = PostBlog.objects.get(id=pk)
     blog.status = 1
     blog.save()
-    print(request.POST)
-    print("000000000000011111111111111")
     return redirect('blogapp:detail', pk=blog.id)
 
+# function to change blog status from publish to unpublish
 def unpublish(request, pk):
     blog = PostBlog.objects.get(id=pk)
     blog.status = 2
     blog.published_date = None
     blog.save()
-    print(request.POST)
-    print("000000000000011111111111111")
     return redirect('blogapp:detail', pk=blog.id)
 
+
+# Function to delete a blog
 def remove(request, pk):
     blog = PostBlog.objects.get(id=pk)
-    print(request.user.is_staff)
     if blog.blogger == request.user or request.user.is_staff:
         return redirect('blogapp:delete', pk=blog.id)
     else:
         return HttpResponse("not authorized!!!!")
     return redirect('blogapp:detail', pk=blog.id)
 
+# Function to update a blog
 def edit(request, pk):
     blog=PostBlog.objects.get(id=pk)
     if blog.blogger == request.user or request.user.is_staff:
@@ -166,94 +183,26 @@ def edit(request, pk):
 
 
 class SearchView(ListView):
+    """
+    Class to get the search results
+    """
     model = PostBlog
-    
+
+    # get Function to get the search results in blog list
     def get(self, request):
-       
-       query = self.request.GET['q']
-       print(query)
-       result = PostBlog.objects.filter(title__icontains=query)
-       
-       print(result)
-       msg = None
-       if not result:
-        msg = "Result Not Found"
-       searched={'result':result,'msg':msg}
-       print("0000000000000000000000000000000")
-       print(searched)
-       return render(request,'blogapp/postblog_list.html',searched)
-
-
-    # def get(self, request, *args, **kwargs):
-    #     """
-    #     Function to render home page
-    #     """
-    #     pass
-    #     # stats = PostBlog.objects.all()
-    #     # stat_id = kwargs['pk']
-    #     # data=form.save()
-    #     # option = self.request.POST['Publish']
-    #     # print("0000000000000000000")
-    #     # print(option)
-    #     # data=form.save()
-    #     # # stat = PostBlog.objects.filter(pk=stat_id)
-    #     # choice = PostBlog.objects.get(pk=stat_id)
-    #     # # print(stat)
-    #     # print(choice)
-    #     # print(choice.status)
-    #     # if self.request.user.is_superuser:
-    #     #     if choice.status == '0' or '2':
-    #     #         choice.status = 1
-    #     #         print("...........")
-    #     #         choice.save()
-
-    #     # elif choice.status == '1' :
-    #     #     choice.status = 1
-    #     #     print("###################################44444.")
-    #     #     choice.save()
-    #     # statuspublish = 
-    #     # return redirect('blogapp:detail', pk =stat_id)
-    #     print(args)
-    #     context={}
-    #     context['object'] = PostBlog.objects.get(pk=kwargs['pk'])
-    #     print("000000000000000000000000000000")
-    #     if 'Published' in self.kwargs.keys():
-    #         print('Published')
-    #     # print(self.kwargs.__dict__)
-    #     return render(request, 'blogapp/postblog_detail.html', context)
-
-class PublishView(View):
-
-    def get(self, request, *args, **kwargs):
-        """
-        Function to render home page
-        """
-        # queryset = models.User.objects.filter(is_active=True).count()
-        stats = PostBlog.objects.all()
-        stat_id = kwargs['pk']
-        stat = PostBlog.objects.get(pk=stat_id)
-        # statuspublish = 
-        return render(request, 'blogapp/detail.html', {'stats': stats})
-        # return JsonResponse(statuspublish, safe=False)
-
-    # def get(self, request, *args, **kwargs):
-
-    #     author = 
-    
-    # def post(self, request, *args, **kwargs):
-    #     stats = self.request.POST
-    #     print("00000000000000000000000000000000000")
-
-    #     print(stats)
-    #     return redirect('blogapp:detail')
-
-    # def form_valid(self, form):
-    #     status = form.save()
-    #     print(status)
-    #     return redirect('blogapp:list')
+        query = self.request.GET['q']
+        result = PostBlog.objects.filter(title__icontains=query)
+        msg = None
+        if not result:
+            msg = "Result Not Found"
+        searched={'result':result,'msg':msg}
+        return render(request,'blogapp/postblog_list.html',searched)
 
 
 class BlogDelete(DeleteView):
+    """
+    Class for deleting a blog
+    """
     model = PostBlog
     template_name = "blogapp/postblog_confirm_delete.html"
 
@@ -262,9 +211,13 @@ class BlogDelete(DeleteView):
 
 
 class BlogList(ListView):
+    """
+    class to show the list of blogs
+    """
     model = PostBlog
     form_class = BlogForm
     template_name = "blogapp/postblog_list.html"
 
+    # function to show only published blogs
     def choices(self):
         return PostBlog.objects.filter(status=1)

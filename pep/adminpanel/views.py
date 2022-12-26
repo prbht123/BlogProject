@@ -9,11 +9,11 @@ from blogapp.forms import BlogForm
 
 class HomeView(View):
     """
-    Home page view
+    Admin Panel page view
     """
     def get(self, request):
         """
-        Function to render home page
+        Function to render Admin panel page
         """
         if request.user.is_staff:
             return render(request, 'adminpanel/hello.html')
@@ -33,14 +33,34 @@ class IndexView(View):
 
 
 class ListBlog(ListView):
+    """
+    class for blog list to show
+    """
     model = PostBlog
     form_class = BlogForm
     template_name = "adminpanel/bloglists.html"
 
+    def get(self, request):
+        """
+        get function to resrict access to certain users
+        """
+        object_list = PostBlog.objects.all()
+        if request.user.is_staff:
+            return render(request, "adminpanel/bloglists.html", {'object_list':object_list})
+        else:
+            return render(request, 'adminpanel/index.html')
+
     def choices(self):
+        """
+        function to return only published blogs
+        """
         return PostBlog.objects.filter(status=1)
 
+
 def published(request, pk):
+    """
+    function to change status to published
+    """
     blog = PostBlog.objects.get(id=pk)
     blog.status = 1
     blog.save()
@@ -49,6 +69,9 @@ def published(request, pk):
     return redirect('adminpanel:listblog')
 
 def unpublished(request, pk):
+    """
+    function to change status to unpublished
+    """
     blog = PostBlog.objects.get(id=pk)
     blog.status = 2
     blog.published_date = None
@@ -60,50 +83,48 @@ def unpublished(request, pk):
 
 class AdminView(View):
     """
-    Home page view
+    Class which has a function which returns number of active users
     """
     def get(self, request):
         """
-        Function to render home page
+        Function which returns number of active users
         """
-        # queryset = models.User.objects.filter(is_active=True).count()
         usercount = User.objects.filter(is_active=True).count()
         return JsonResponse(usercount, safe=False)
 
+
 class AdView(View):
     """
-    Home page view
+    Class which has a function which returns number of superuser users
     """
     def get(self, request):
         """
-        Function to render home page
+        Function which returns number of superuser users
         """
-        # queryset = models.User.objects.filter(is_active=True).count()
         superuser = User.objects.filter(is_superuser=True).count()
         return JsonResponse(superuser, safe=False)
 
+
 class NormalView(View):
     """
-    Home page view
+    Class which has a function which returns number of normal users
     """
     def get(self, request):
         """
-        Function to render home page
+        Function which returns number of normal users
         """
-        # queryset = models.User.objects.filter(is_active=True).count()
         normaluser = User.objects.filter(is_superuser=False).count()
         return JsonResponse(normaluser, safe=False)
 
 
 class MyUserView(View):
     """
-    User Status view
+    Class to restrict access to certain page for users
     """
     def get(self, request):
         """
-        Function to render User Status page
+        get Function to restrict access to certain page for users
         """
-        # context = User.objects.all()
         users = User.objects.all()
         if self.request.user.is_superuser:
             return render(request, 'adminpanel/hey.html', {'users': users})
@@ -119,15 +140,8 @@ class MyStatusView(View):
         """
         Function to render User Status page
         """
-        # user = User.objects.filter(pk=3)
-        # user.is_superuser = True
-        # user.is_staff = True
-        # user.save()
-
         users = User.objects.all()
-
         user_id = kwargs['pk']
-
         user = User.objects.get(pk=user_id)
         if request.user.is_superuser:
             if user.is_superuser:
@@ -137,6 +151,4 @@ class MyStatusView(View):
                 user.is_superuser=True
                 user.save()
 
-
         return render(request, 'adminpanel/hey.html', {'users': users})
-

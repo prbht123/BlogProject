@@ -49,11 +49,22 @@ class PostBlog(models.Model):
     tags = models.ManyToManyField(TagBlog, related_name="postblog_tags")
     category = models.ForeignKey(BlogCategory, related_name="postblog_category", on_delete=models.CASCADE, null = True, blank=True )
     status = models.CharField(max_length=1, choices = STATUS_CHOICES, null=True, blank=True)
+    likes = models.ManyToManyField(User, related_name='bloglike_user')
+    dislikes = models.ManyToManyField(User, related_name='blogdislike_user')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_date = models.DateField(auto_now=True)
     slug = models.SlugField( unique=True)
 
+    # Function to return number of likes
+    def number_of_likes(self):
+        return self.likes.count()
+
+    # Function to return number of dislikes
+    def number_of_dislikes(self):
+        return self.dislikes.count()
+
+    # Function to return unique slug
     def unique_slug(self):
         unique_slugg = slugify(self.title)
         num = 1
@@ -68,7 +79,6 @@ class PostBlog(models.Model):
       if not self.slug:
          self.slug = self.unique_slug()
       return super().save(*args, **kwargs)
-
 
     # Function to return title on table
     def __str__(self):
