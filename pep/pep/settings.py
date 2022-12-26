@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "adminpanel",
     "blogapp",
-    "fontawesomefree"
+    "blogcomment",
+    "fontawesomefree",
+    "widget_tweaks"
 ]
 
 MIDDLEWARE = [

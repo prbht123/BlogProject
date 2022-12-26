@@ -1,99 +1,303 @@
 {% extends 'adminpanel/base.html' %}
 {% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/detail.css' %}">
+{% endblock %}
+
 {% block content %}
+{% load widget_tweaks %}
 
 
-<div class=" bg-dark" id="grad">
-    <div class="container d-flex justify-content-center">
-        <div class="card bg-blur my-4">
-            <div class="card-header bg-dark text-white text-center fs-4 fw-bold">Blog Details</div>
-            <div class="card-body">
-                <hr>
-                <table class="table">
-                    <thead>
-                    </thead>
-                    <tbody>
-                    
-                    <tr>
-                        <th scope="row">Title</th>
-                        <td>{{ object.title }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Content</th>
-                        <td>{{ object.content|linebreaks  }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Image</th>
-                        <td colspan="2">{{ object.image.url }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Blogger</th>
-                        <td colspan="2">{{ object.blogger }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Tags</th>
-                        {% for i in object.tags.all  %}
-                        <td colspan="2">{{ i.name }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <th scope="row">Category</th>
-                        <td colspan="2">{{ object.category }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Status</th>
-                        <td colspan="2">{{ object.get_status_display }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Created At</th>
-                        <td colspan="2">{{ object.created_at }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Updated At</th>
-                        <td colspan="2">{{ object.updated_at }}</td>
-                    </tr>
-                    <tr>
-                        {% if object.status == '1' %}
-                        <th scope="row">Published Date</th>
-                        <td colspan="2">{{ object.published_date }}</td>
-                        {% endif %}
-                    </tr>
-                   
-                    </tbody>
-                </table>
-                {% comment %} <a href = "{% url 'blogapp:update' pk=object.id %}" class="text-decoration-none">Update Blog -->
-                    <br><a href = "{% url 'blogapp:delete' pk=object.id %}" class="text-decoration-none">Delete Blog --> {% endcomment %}
-            </div>
-            <div class="card-footer">
-                {% if request.user == object.blogger or request.user.is_staff %}
-                <a class="text-decoration-none" href="{% url 'blogapp:edit' pk=object.id %}">Update</a>
-                <br>
-                <a class="text-decoration-none" href="{% url 'blogapp:remove' pk=object.id %}">Delete</a>
-                {% endif %}    
-                {% comment %} {% csrf_token%}
-                    {% if request.user.is_superuser %}
-                    <a href="{% url 'blogapp:publish' pk=object.id  %}" class="text-decoration-none">Publish</a>
-                    {% comment %} <input type="submit" name="Published" value="Publish">
-                    {% endif %}
+
+    <div class=" bg-dark" id="grad">
+        <div class="container d-flex justify-content-center">
+            <div class="card bg-blur my-4 ">
+                <div class="card-header bg-dark text-white text-center fs-4 fw-bold">Blog Details</div>
+                <div class="card-body">
+                    <hr>
+                    <table class="table ">
+                        <thead>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">Title</th>
+                            <td>{{ object.title }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Content</th>
+                            <td>{{ object.content|linebreaks  }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Image</th>
+                            <td colspan="2"><img src="{{ object.image.url }}" class="rounded shadow-lg p-3 mb-5 bg-white rounded" style="max-width:50%;max-height:40%;"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Blogger</th>
+                            <td colspan="2">{{ object.blogger }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Tags</th>
+                            {% for i in object.tags.all  %}
+                            <td colspan="2">{{ i.name }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Category</th>
+                            <td colspan="2">{{ object.category }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Status</th>
+                            <td colspan="2">{{ object.get_status_display }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Created At</th>
+                            <td colspan="2">{{ object.created_at }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Updated At</th>
+                            <td colspan="2">{{ object.updated_at }}</td>
+                        </tr>
+                        <tr>
+                            {% if object.status == '1' %}
+                            <th scope="row">Published Date</th>
+                            <td colspan="2">{{ object.published_date }}</td>
+                            {% endif %}
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="card-footer ms-3 ">
+                    {% if request.user == object.blogger or request.user.is_staff %}
+                    <a class="btn btn-primary mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:edit' pk=object.id %}">Update</a>
+                    <a class="btn btn-warning ms-2 mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:remove' pk=object.id %}">Delete</a>
                     <br>
-                    <a href="{% url 'blogapp:unpublish' pk=object.id  %}" class ="text-decoration-none">UnPublish</a> {% endcomment %}
-                    {% comment %} <input type="submit" name="Unpublished" value="Unpublish"> {% endcomment %}
+                    {% endif %} 
+                    
+                    
+                    {% if request.user.is_authenticated %}
+                    <div class="container">
+                        {% comment %} <form action="{% url 'blogapp:like' pk=object.id %}">
+                            {% csrf_token %}
+                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like" ><i class="fas fa-thumbs-up"></i></button>
+                        </form>
+                        <br>
+                        <form action="{% url 'blogapp:dislike' pk=object.id %}">
+                            {% csrf_token %}
+                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
+                        </form> {% endcomment %}
+
+                        {% if like %}
+                        <form action="{% url 'blogapp:dislike' pk=object.id %}">
+                            {% csrf_token %}
+                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
+                        </form>
+
+                        {% elif dislike %}
+                        <form action="{% url 'blogapp:like' pk=object.id %}">
+                            {% csrf_token %}
+                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like"><i class="fas fa-thumbs-up"></i></button>
+                        </form>
+
+                        {% else %}
+                        <form action="{% url 'blogapp:like' pk=object.id %}">
+                            {% csrf_token %}
+                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like"><i class="fas fa-thumbs-up"></i></button>
+                        </form>
+                        <br>
+                        <form action="{% url 'blogapp:dislike' pk=object.id %}">
+                            {% csrf_token %}
+                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
+                        </form>
+
+                        {% endif %}
+                    </div>
+                        {% comment %} <form action="{% url 'blogapp:like' pk=object.id %}">
+                            {% csrf_token %}
+                            {% if like  %}
+                                <button type="submit" name="unlike" value="{{ object.id }}" class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button>
+                            {% elif not like %}
+                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success me-3"><i class="fas fa-thumbs-up"></i></button>
+
+                            
+                            {% comment %} {% else %}
+                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success me-3"><i class="fas fa-thumbs-up"></i></button>
+                                <button type="submit" name="unlike" value="{{ object.id }}" class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button> {% endcomment %}
+
+                            {% comment %} {% else %}
+                                <button type="submit" name="unlike" value="{{ object.id }}" class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button>
+                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success me-3"><i class="fas fa-thumbs-up"></i></button>
+
+                            {% endif %}
+                        </form> {% endcomment %}
+                    {% endif %}
+                            <div class="container fs-4 mt-2">
+                            {% if like_number < 2 %}
+                            {{ like_number }} Like &nbsp  
+                            {% else %}
+                            {{ like_number }} Likes &nbsp  
+                            {% endif %}
+
+                            {% if dislike_number < 2 %}
+                            {{ dislike_number }} Dislike
+                            {% else %}
+                            {{ dislike_number }} Dislikes
+                            {% endif %}
+                            </div>
+                    
+                </div>                
+
+                    <div class="container-fluid fs-5 ms-2" style="font-family:Times">
+                        {% if user.is_authenticated %}
+                        <form action={% url 'blogcomment:create' pk=object.id %} method="post">
+                        {% csrf_token %}
+                        {% comment %} {{ form.as_p }} {% endcomment %}
+                        {% render_field form.comment id="comment" class="form-control" placeholder="Comment Here....." type="text" %}
+                        <input class="btn btn-outline-success mt-2" type="submit" value="Comment">
+                        </form>
+                        {% else %}
+                        Please Login to Like and Comment
+                        {% endif %}
+                    </div><hr>
+
+                    <div class="container-fluid my-3 ms-3 fs-5" style="font-family:Times">
+                        <div class="row d-flex">
+                            <div class="col-sm-9  ">
+                                <h3>Previous Comments</h3>
+                                <div class="container-fluid" id="list1">
+                                    <table class="table" style="table-layout:fixed">
+                                        <tbody>
+                                            {% for com in comment_list %}
+                                            <tr>
+                                                <td style="width:25%"><img src="{{ com.author.profilemodel.user_image.url }}" class="rounded rounded-circle " style="width:25%;max-height:10%;"> {{ com.author }}</td>
+                                                <td>{{ com.comment }}<br>Date :- {{ com.updated_at }}</td>
+                                                
+                                            </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="container-fluid" id="list2" style="display:none">
+                                    <table class="table" style="table-layout:fixed">
+                                        <tbody>
+                                            {% for c in postblog.blogcommmentmodel_comment.all reversed %}
+                                            <tr>
+                                                <td style="width:25%"> <img src="{{ c.author.profilemodel.user_image.url }}" class="rounded rounded-circle" style="max-width:15%;max-height:5%;">  {{ c.author }}</td>
+                                                <td >{{ c.comment }}<br>Date :- {{ c.updated_at }}</th>
+                                                
+                                            </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <input type="button" class = " btn btn-outline-primary ms-3" id="myBtn" value="Show All Comments" onclick="myFunction()" style="width:10rem">
+                            </div>
+
+
+                            {% comment %} <div class="col-sm-3 ">
+                                <div class="container " id="list1">
+                                    
+                                    {% for com in comment_list %}
+                                    
+                                    *  {{ com.comment }}<br>
+                                    <p class="fs-6">{{ com.updated_at }}</p>
+
+                                    {% endfor %}
+                                </div>
+
+
+                        {% comment %} <button onclick="myFunction()" id="myBtn" class = "btn btn-outline-primary">Show all comments</button> {% endcomment %}
+
+                                {% comment %} <div class="container" id="list2" onload="myFunc()" style="display:none" >
+                                    <h3 class="mb-3">Previous Comments</h3>
+                                    {% for c in postblog.blogcommmentmodel_comment.all reversed %}
+
+                                    *  {{ c.comment }}<br>
+                                    <p class="fs-6">{{ c.updated_at }}</p>
+
+                                    {% endfor %}
+                                </div>
+
+                                <input type="button" class = "btn btn-outline-primary" id="myBtn" value="Show All Comments" onclick="myFunction()">
+                            </div> {% endcomment %} 
+                        </div>
+
+                            {% comment %} <a href="{% url 'blogapp:commentlist' pk=object.id  %}" class="btn btn-secondary">Show all comments<a/>
+
+                                {% for c in comments %}
+                            {{ c.comment }}
+
+                            {% endfor %} {% endcomment %}
+
+                            {% comment %} <a id="button1" class = "btn btn-outline-primary" onclick="add()" >Show all Comments</a><br>
+
+                            {% for c in comments %}
+                            {{ c.comment }}
+                            {% endfor %} {% endcomment %}
+
+                    </div>
+
+
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    #grad {          
-            background: 
-              repeating-radial-gradient(
-                circle at 0 0, 
-                #2c2b38,
-                #59554b 50px
-              );
+
+    <script>
+
+        function myFunction() {
+          var x = document.getElementById("list1");
+          var y = document.getElementById("list2");
+
+            if (x.style.display == "none") {
+                x.style.display = "block";
+                y.style.display = "none";
+                document.getElementById("myBtn").value = "Show All Comments";
+            } else {
+                x.style.display = "none";
+                y.style.display = "block";
+                document.getElementById("myBtn").value = "Show Less Comments";
+            }
+        }
+    </script>
+
+
+{% comment %} 
+<script>
+    function add(){
+        console.log("Hellllooooo1")
+        $.ajax(
+            {
+                
+                type:"GET",
+                url:"{% url 'blogapp:ajx' %}",
+                data:{
+                    'a' : "abcd"
+                },
+                success:function(data){
+                    console.log(data);
+
+                    $('#button1').innerHTML = `<div>
+                        <p>${data.comment}</p>
+                    </div>` ;
+                    
+
+                }
+                
+            }
+        )
+
+       
+
+        
     }
-</style>
+</script> {% endcomment %}
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 {% endblock %}

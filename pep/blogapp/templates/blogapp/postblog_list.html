@@ -1,5 +1,10 @@
 {% extends 'adminpanel/base.html' %}
 {% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <section>
@@ -34,7 +39,7 @@
                     {% if result %}
                         {% for res in result %}
                         <div class="col-md-9 mx-3 d-flex justify-content-center">
-                            <div class="card my-4">
+                            <div class="card my-4 shadow p-3 mb-5 bg-white rounded">
                                 <div class="card-header bg-dark text-white fs-3 fw-bold">{{ res.title }}</div>
                                 <div class='card-body'>
                                     
@@ -68,7 +73,7 @@
                     {% for obj in view.choices %}
 
                         <div class="col-md-9 mx-3 d-flex justify-content-center">
-                            <div class="card my-4">
+                            <div class="card my-4 shadow-lg p-3 mb-5 bg-white rounded">
                                 <div class="card-header bg-dark text-white fs-3 fw-bold">{{ obj.title }}</div>
                                 <div class='card-body'>
                                     
@@ -111,5 +116,6 @@
         </div>
     </div>
 </section>
+
 
 {% endblock %}

@@ -24,7 +24,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("mypep/", include('mypep.urls')),
     path("adminpanel/", include('adminpanel.urls')),
-    path("blogapp/", include('blogapp.urls'))
+    path("blogapp/", include('blogapp.urls')),
+    path("blogcomment/", include('blogcomment.urls'))
 ]
 
 if settings.DEBUG:

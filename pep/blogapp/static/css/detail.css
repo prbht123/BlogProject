@@ -1,0 +1,42 @@
+
+    #grad {          
+            background: 
+              repeating-radial-gradient(
+                circle at 0 0, 
+                #2c2b38,
+                #59554b 50px
+              );
+    }
+
+
+    #comment{
+        height:60px;
+    }
+    .btn-primary:hover{
+        background-color:black
+    }
+    .btn-danger:hover{
+        background-color:black
+    }
+    .btn-warning:hover{
+        background-color:white
+    }
+    .btn-success:hover{
+        background-color:black
+    }
+
+    #like:visited{
+        background-color: white;
+    }
+
+    #dislike:visited{
+        background-color: white;
+    }
+
+    #like:active{
+        background-color: white;
+    }
+
+    #dislike:active{
+        background-color: white;
+    }

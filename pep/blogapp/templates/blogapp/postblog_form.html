@@ -1,16 +1,18 @@
 {% extends 'adminpanel/base.html' %}
 {% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+{% endblock %}
+
 {% block content %}
-
-
-
 
 
 <div class="bg-secondary">
     <div class ="container d-flex justify-content-center ">
         <div class="d-flex row">
             <div class="col sm-3">
-                <div class ="card my-4">
+                <div class ="card shadow-lg my-4">
                     <div class ="card-header bg-dark text-white text-center fs-4 fw-bold">Create a Blog !!!!</div>
                     <div class="card-body">
                         <form action={% url 'blogapp:create' %} method = "POST"  enctype = "multipart/form-data">
@@ -28,23 +30,11 @@
             </div>
             <div class="col sm-2 mx-4 mt-4">
                 <img src="{% static 'images/blogg.jpg' %}"
-                        alt="Blog image" class="w-100 vh-100" style="object-fit: cover; object-position: center;  border-radius: .50rem;">
+                        alt="Blog image" class="w-100 vh-100 shadow-lg " style="object-fit: cover; object-position: center;  border-radius: .50rem;">
             </div>
         </div>
     </div>
 </div>
 
-
-<style>
-    input[type=submit]{
-        background-color: #04AA6D;
-        border-radius: 25px;
-        color: white;
-        padding: 16px 32px;
-        text-decoration: none;
-        margin: 4px 2px;
-        cursor: pointer;
-      }
-</style>
 
 {% endblock %}
