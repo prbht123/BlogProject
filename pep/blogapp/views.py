@@ -9,11 +9,14 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
-from blogcomment.forms import BlogCommentForm
-from blogcomment.models import BlogCommentModel
+from blogcomment.forms import BlogCommentForm, BlogRatingForm
+from blogcomment.models import BlogCommentModel, BlogRatingModel
 from mypep.models import ProfileModel
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.db.models import Avg
+from decimal import Decimal
+from django.db.models import Func
 
 
 class Blogging(View):
@@ -113,11 +116,23 @@ class BlogDetail(DetailView):
         dislike = False
         if blog.dislikes.filter(id=self.request.user.id).exists():
             dislike = True
+        ratings = BlogRatingModel.objects.filter(post=blog_id)
+        lst = []
+        for i in ratings:
+            lst.append(i.rater)
+        if self.request.user not in lst:
+            context["ratingform"] = BlogRatingForm()
+        rating_avg = BlogRatingModel.objects.filter(post=blog_id).aggregate(Avg('rating'))
+        rate = {}
+        rate = rating_avg
+        rate_avg = rate.get('rating__avg')
         context["comment_list"] = comments
         context["like_number"] = like_number
         context["like"] = like
         context["dislike_number"] = dislike_number
         context["dislike"] = dislike
+        context["list"] = lst
+        context["rate_avg"] = rate_avg
         return context
 
 
