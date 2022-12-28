@@ -1,13 +1,14 @@
 {% extends 'adminpanel/base.html' %}
 {% load static %}
+<script src="{% static 'js/detail.js' %}"></script>
 
 {% block style %}
+{% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/detail.css' %}">
 {% endblock %}
 
 {% block content %}
 {% load widget_tweaks %}
-
 
 
     <div class=" bg-dark" id="grad">
@@ -69,83 +70,93 @@
                 </div>
 
 
-                <div class="card-footer ms-3 ">
+                <div class="card-footer mb-3 ">
                     {% if request.user == object.blogger or request.user.is_staff %}
                     <a class="btn btn-primary mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:edit' pk=object.id %}">Update</a>
                     <a class="btn btn-warning ms-2 mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:remove' pk=object.id %}">Delete</a>
-                    <br>
+                    <hr>
                     {% endif %} 
                     
-                    
-                    {% if request.user.is_authenticated %}
-                    <div class="container">
-                        {% comment %} <form action="{% url 'blogapp:like' pk=object.id %}">
-                            {% csrf_token %}
-                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like" ><i class="fas fa-thumbs-up"></i></button>
-                        </form>
-                        <br>
-                        <form action="{% url 'blogapp:dislike' pk=object.id %}">
-                            {% csrf_token %}
-                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
-                        </form> {% endcomment %}
+                    <div class="row" style="font-family: georgia;">
+                        <div class ="col-4">
+                            {% if request.user.is_authenticated %}
+                            <div class="container">
+                                
+                                {% if like %}
+                                <form action="{% url 'blogapp:dislike' pk=object.id %}">
+                                    {% csrf_token %}
+                                        <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
+                                </form>
 
-                        {% if like %}
-                        <form action="{% url 'blogapp:dislike' pk=object.id %}">
-                            {% csrf_token %}
-                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
-                        </form>
+                                {% elif dislike %}
+                                <form action="{% url 'blogapp:like' pk=object.id %}">
+                                    {% csrf_token %}
+                                        <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like"><i class="fas fa-thumbs-up"></i></button>
+                                </form>
 
-                        {% elif dislike %}
-                        <form action="{% url 'blogapp:like' pk=object.id %}">
-                            {% csrf_token %}
-                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like"><i class="fas fa-thumbs-up"></i></button>
-                        </form>
+                                {% else %}
+                                <form action="{% url 'blogapp:like' pk=object.id %}">
+                                    {% csrf_token %}
+                                        <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success " id = "like"><i class="fas fa-thumbs-up"></i></button>
+                                </form>
+                                <br>
+                                <form action="{% url 'blogapp:dislike' pk=object.id %}">
+                                    {% csrf_token %}
+                                        <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger " id = "dislike"><i class="fas fa-thumbs-down"></i></button>
+                                </form>
 
-                        {% else %}
-                        <form action="{% url 'blogapp:like' pk=object.id %}">
-                            {% csrf_token %}
-                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like"><i class="fas fa-thumbs-up"></i></button>
-                        </form>
-                        <br>
-                        <form action="{% url 'blogapp:dislike' pk=object.id %}">
-                            {% csrf_token %}
-                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
-                        </form>
-
-                        {% endif %}
-                    </div>
-                        {% comment %} <form action="{% url 'blogapp:like' pk=object.id %}">
-                            {% csrf_token %}
-                            {% if like  %}
-                                <button type="submit" name="unlike" value="{{ object.id }}" class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button>
-                            {% elif not like %}
-                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success me-3"><i class="fas fa-thumbs-up"></i></button>
-
-                            
-                            {% comment %} {% else %}
-                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success me-3"><i class="fas fa-thumbs-up"></i></button>
-                                <button type="submit" name="unlike" value="{{ object.id }}" class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button> {% endcomment %}
-
-                            {% comment %} {% else %}
-                                <button type="submit" name="unlike" value="{{ object.id }}" class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button>
-                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success me-3"><i class="fas fa-thumbs-up"></i></button>
-
-                            {% endif %}
-                        </form> {% endcomment %}
-                    {% endif %}
-                            <div class="container fs-4 mt-2">
-                            {% if like_number < 2 %}
-                            {{ like_number }} Like &nbsp  
-                            {% else %}
-                            {{ like_number }} Likes &nbsp  
-                            {% endif %}
-
-                            {% if dislike_number < 2 %}
-                            {{ dislike_number }} Dislike
-                            {% else %}
-                            {{ dislike_number }} Dislikes
-                            {% endif %}
+                                {% endif %}
                             </div>
+                                
+                            {% endif %}
+                                    <div class="container fs-4 mt-2">
+                                        {% if like_number < 2 %}
+                                        {{ like_number }} Like &nbsp  
+                                        {% else %}
+                                        {{ like_number }} Likes &nbsp  
+                                        {% endif %}
+
+                                        <br>
+
+                                        {% if dislike_number < 2 %}
+                                        {{ dislike_number }} Dislike
+                                        {% else %}
+                                        {{ dislike_number }} Dislikes
+                                        {% endif %}
+                                    </div>
+                        </div>            
+
+                        <div class="col-4">
+                            <div class="container fs-4  ">
+                                        {% if user.is_authenticated %}
+                                            {% if request.user not in list %}
+                                            <form action={% url 'blogcomment:rate' pk=object.id %} method="GET">
+                                                {% csrf_token %}
+                                                <fieldset class="rating ">
+                                                    <h3>Please Rate:</h3>
+                                                    <input type="submit" id="star5" name="rating" value="5" /><label for="star5" title="Best">5 stars</label>
+                                                    <input type="submit" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
+                                                    <input type="submit" id="star3" name="rating" value="3" /><label for="star3" title="Average">3 stars</label>
+                                                    <input type="submit" id="star2" name="rating" value="2" /><label for="star2" title="Bad">2 stars</label>
+                                                    <input type="submit" id="star1" name="rating" value="1" /><label for="star1" title="Worst">1 star</label>
+                                                </fieldset>                                           
+
+                                            </form>                    
+                                            
+                                            {% endif %}
+                                        {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="container fs-4">
+                                        Rating : <a  class="btn btn-success fw-bold"> {{ rate_avg|stringformat:".1f" }} <i class="fa fa-star"></i><a/>
+                                        <br>
+                                        <span  class="fs-2" id="stars"></span>
+                                        
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>                
 
@@ -161,6 +172,7 @@
                         Please Login to Like and Comment
                         {% endif %}
                     </div><hr>
+
 
                     <div class="container-fluid my-3 ms-3 fs-5" style="font-family:Times">
                         <div class="row d-flex">
@@ -195,54 +207,11 @@
                                         </tbody>
                                     </table>
                                 </div>
+
                                 <input type="button" class = " btn btn-outline-primary ms-3" id="myBtn" value="Show All Comments" onclick="myFunction()" style="width:10rem">
-                            </div>
-
-
-                            {% comment %} <div class="col-sm-3 ">
-                                <div class="container " id="list1">
-                                    
-                                    {% for com in comment_list %}
-                                    
-                                    *  {{ com.comment }}<br>
-                                    <p class="fs-6">{{ com.updated_at }}</p>
-
-                                    {% endfor %}
-                                </div>
-
-
-                        {% comment %} <button onclick="myFunction()" id="myBtn" class = "btn btn-outline-primary">Show all comments</button> {% endcomment %}
-
-                                {% comment %} <div class="container" id="list2" onload="myFunc()" style="display:none" >
-                                    <h3 class="mb-3">Previous Comments</h3>
-                                    {% for c in postblog.blogcommmentmodel_comment.all reversed %}
-
-                                    *  {{ c.comment }}<br>
-                                    <p class="fs-6">{{ c.updated_at }}</p>
-
-                                    {% endfor %}
-                                </div>
-
-                                <input type="button" class = "btn btn-outline-primary" id="myBtn" value="Show All Comments" onclick="myFunction()">
-                            </div> {% endcomment %} 
+                            </div> 
                         </div>
-
-                            {% comment %} <a href="{% url 'blogapp:commentlist' pk=object.id  %}" class="btn btn-secondary">Show all comments<a/>
-
-                                {% for c in comments %}
-                            {{ c.comment }}
-
-                            {% endfor %} {% endcomment %}
-
-                            {% comment %} <a id="button1" class = "btn btn-outline-primary" onclick="add()" >Show all Comments</a><br>
-
-                            {% for c in comments %}
-                            {{ c.comment }}
-                            {% endfor %} {% endcomment %}
-
                     </div>
-
-
             </div>
         </div>
     </div>
@@ -250,6 +219,7 @@
 
     <script>
 
+        // comments list function
         function myFunction() {
           var x = document.getElementById("list1");
           var y = document.getElementById("list2");
@@ -264,39 +234,34 @@
                 document.getElementById("myBtn").value = "Show Less Comments";
             }
         }
+
+
+        //star functions
+        document.getElementById("stars").innerHTML = getStars( {{rate_avg}} );
+
+        function getStars(rating) {
+
+        // Round to nearest half
+        rating = Math.round(rating * 2) / 2;
+        let output = [];
+
+        // Append all the filled whole stars
+        for (var i = rating; i >= 1; i--)
+            output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+
+        // If there is a half a star, append it
+        if (i == .5) output.push('<i class="fa fa-star-half-alt" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+
+        // Fill the empty stars
+        for (let i = (5 - rating); i >= 1; i--)
+            output.push('<i class="far fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+
+        return output.join('');
+
+        }
+
     </script>
 
-
-{% comment %} 
-<script>
-    function add(){
-        console.log("Hellllooooo1")
-        $.ajax(
-            {
-                
-                type:"GET",
-                url:"{% url 'blogapp:ajx' %}",
-                data:{
-                    'a' : "abcd"
-                },
-                success:function(data){
-                    console.log(data);
-
-                    $('#button1').innerHTML = `<div>
-                        <p>${data.comment}</p>
-                    </div>` ;
-                    
-
-                }
-                
-            }
-        )
-
-       
-
-        
-    }
-</script> {% endcomment %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
