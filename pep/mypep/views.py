@@ -56,7 +56,7 @@ class ProfileUpdate(UpdateView):
     template_name='mypep/profilemodel_update.html'
 
     pk_url_kwarg = 'pk'
-    success_url = reverse_lazy('mypep:base')
+    success_url = reverse_lazy('mypep:detail')
 
 
 class ProfileDetail(DetailView):

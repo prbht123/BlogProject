@@ -10,11 +10,11 @@
                         <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
                             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
                                 {% load static %}
-                                <img src="{% static 'Images/profile.svg' %}"
-                                            alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                                            style="width: 150px; z-index: 1">
+                                <img src="{{ request.user.profilemodel.user_image.url }}"
+                                            alt="Generic placeholder image" class=" img-thumbnail mt-4 mb-2"
+                                            style="width: 150px;height:150px; z-index: 1">
                                 
-                                    <button class="btn btn-outline-dark" onclick="location.href='{% url 'mypep:update' pk=1 %}';" data-mdb-ripple-color="dark"
+                                    <button class="btn btn-outline-dark " onclick="location.href='{% url 'mypep:update' pk=user.id %}';" data-mdb-ripple-color="dark"
                                     style="z-index: 1;">
                                         Update Profile
                                     </button>
@@ -30,6 +30,7 @@
                         <div class="card-body p-4 text-black">
                             <div class="my-5 mx-3">
                                 <p class="lead fw-normal mb-1">About</p>
+                                <a class='btn btn-outline-dark' href="{% url 'blogapp:listuser' %}">Blogs</a>
                                 <div class="p-4" >
                                     <p class="font-italic mb-1">Junior Software Developer</p>
                                     <p class="font-italic mb-1">Lives in Kolkata</p>

@@ -17,6 +17,11 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 from decimal import Decimal
 from django.db.models import Func
+from django.utils import timezone
+import datetime
+import operator
+from operator import itemgetter
+from decimal import Decimal
 
 
 class Blogging(View):
@@ -37,7 +42,7 @@ class BlogCreate(LoginRequiredMixin, CreateView):
 
     form_class = BlogForm
     template_name = "blogapp/postblog_form.html"
-    success_url = reverse_lazy('blogapp:create')
+    success_url = reverse_lazy('blogapp:list')
 
     # Function if the form is valid
     def form_valid(self, form):
@@ -45,6 +50,7 @@ class BlogCreate(LoginRequiredMixin, CreateView):
             tagging  = tag_data.split(',')
             data = form.save(commit=False)
             data.blogger = self.request.user
+            data.status = 0
             data.save()
             for tag in tagging:
                 try:
@@ -52,7 +58,7 @@ class BlogCreate(LoginRequiredMixin, CreateView):
                     data.tags.add(var)
                 except:
                     data.tags.create(name=tag)
-            return redirect('blogapp:create')
+            return redirect('blogapp:list')
 
 
 class BlogUpdate(LoginRequiredMixin, UpdateView):
@@ -69,7 +75,8 @@ class BlogUpdate(LoginRequiredMixin, UpdateView):
         tag_data = self.request.POST['tagname']
         tagging  = tag_data.split(' ')
         data = form.save()
-
+        data.published_date = None
+        data.save()
         for tag in tagging:
             try:
                 var = TagBlog.objects.get(name=tag)
@@ -82,7 +89,7 @@ class BlogUpdate(LoginRequiredMixin, UpdateView):
                 data.tags.create(name=tag)
 
         status_data = self.request.POST['status']
-        return redirect('blogapp:create')
+        return redirect('blogapp:detail', data.id)
 
     # dispatch function to show particular fields 
     def dispatch(self, request, *args, **kwargs ):
@@ -167,6 +174,7 @@ def postDisLike(request, pk):
 def publish(request, pk):
     blog = PostBlog.objects.get(id=pk)
     blog.status = 1
+    blog.published_date = timezone.now()
     blog.save()
     return redirect('blogapp:detail', pk=blog.id)
 
@@ -220,9 +228,39 @@ class BlogDelete(DeleteView):
     """
     model = PostBlog
     template_name = "blogapp/postblog_confirm_delete.html"
-
     pk_url_kwarg = 'pk'
     success_url = reverse_lazy('blogapp:create')
+
+
+class BlogHome(ListView):
+    """
+    class to show the list of blogs
+    """
+    model = PostBlog
+    template_name = "blogapp/postblog_home.html"
+
+    # function to show latest 4 published blogs
+    def get_context_data(self,  *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        blog_list = PostBlog.objects.order_by('-created_at').filter(status=1)[:4]
+        count = PostBlog.objects.filter(status=1).count()
+        lst = []
+        publish = PostBlog.objects.filter(status=1)
+        posts = PostBlog.objects.all()
+        for p in posts:
+            rating = BlogRatingModel.objects.filter(post=p.id).aggregate(Avg('rating'))
+            if not rating['rating__avg']:
+                rating['rating__avg'] = 0
+            rating['rating__avg'] = '{:0.2f}'.format(rating['rating__avg'])
+            post_dict = {'post':p,'rating':rating['rating__avg']}
+            lst.append(post_dict)
+        lst.sort(key=operator.itemgetter('rating'),reverse=True)
+        blog_list_rating = BlogRatingModel.objects.order_by('-rating')[:4]
+        context['count'] = count
+        context['blog_list'] = blog_list 
+        context['blog_list_rating'] = blog_list_rating
+        context['lst'] = lst[:4]
+        return context
 
 
 class BlogList(ListView):
@@ -234,5 +272,47 @@ class BlogList(ListView):
     template_name = "blogapp/postblog_list.html"
 
     # function to show only published blogs
+    def get_context_data(self,  *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        blog_list = PostBlog.objects.order_by('-created_at').filter(status=1)[:4]
+        context['blog_list'] = blog_list
+        return context
+
+
+class BlogListRating(ListView):
+    """
+    class to show the list of blogs according to ratings
+    """
+    model = PostBlog
+    form_class = BlogForm
+    template_name = "blogapp/postblog_list.html"
+
+    def get_context_data(self,  *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        posts = PostBlog.objects.filter(status=1)
+        lst=[]
+        for p in posts:
+            rating = BlogRatingModel.objects.filter(post=p.id).aggregate(Avg('rating'))
+            if not rating['rating__avg']:
+                rating['rating__avg'] = 0
+            post_dict = {'post':p,'rating':rating['rating__avg']}
+            lst.append(post_dict)
+        lst.sort(key=operator.itemgetter('rating'),reverse=True)
+        blog_list = []
+        for k in lst:
+            blog_list.append(k['post'])
+        context['blog_list'] = blog_list
+        return context
+
+
+class BlogListUser(ListView):
+    """
+    class to show the list of blogs
+    """
+    model = PostBlog
+    form_class = BlogForm
+    template_name = "blogapp/postblog_listuser.html"
+
+    # function to show only published blogs
     def choices(self):
-        return PostBlog.objects.filter(status=1)
+        return PostBlog.objects.filter(blogger=self.request.user)

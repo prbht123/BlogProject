@@ -2,39 +2,44 @@
 {% load static %}
 
 {% block style %}
+{% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
 {% endblock %}
 
 {% block content %}
+{% load widget_tweaks %}
 
 
-<div class="bg-secondary">
-    <div class ="container d-flex justify-content-center ">
-        <div class="d-flex row">
-            <div class="col sm-3">
-                <div class ="card shadow-lg my-4">
-                    <div class ="card-header bg-dark text-white text-center fs-4 fw-bold">Create a Blog !!!!</div>
-                    <div class="card-body">
-                        <form action={% url 'blogapp:create' %} method = "POST"  enctype = "multipart/form-data">
-                            {% csrf_token%}
-                            <div class="form-group mb-4 fw-bold">
-                            {{form.as_p}}
-                            Tag : <input type="text" value="" name="tagname">
-                            </div>
-                            <div class=' card-footer'>
-                                <input type = "submit" value ="Submit">
-                            </div>
-                        </form>
+
+    <div class=" container-fluid bg-dark" id="back" style="background-image: url('https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
+        <div class ="">
+            <div class=" row">
+                <div class="d-flex col justify-content-center p-4">
+                    <div class ="card shadow-lg  my-4">
+                        <div class ="card-header bg-dark text-white  text-center fs-4 fw-bold" style="font-family:Cursive";>Create a Blog !!!!</div>
+                        <div class="card-body shadow">
+                            <form action={% url 'blogapp:create' %} method = "POST"  enctype = "multipart/form-data">
+                                {% csrf_token%}
+                                <div class="form-group mb-4  fs-5 fw-bold" style="font-family:Times;">
+                                {% comment %} {{form.as_p}} {% endcomment %}
+                                    Title<div class="form-group mb-2 fw-bold">{{ form.title }}</div>
+                                    Content<div class="d-flex form-group mb-2 fw-bold">{{ form.content }}</div>
+                                    Image<div class="d-flex form-group mb-2 ">{{ form.image}}</div>
+                                    Category<div class="form-group mb-2 fw-bold">{{ form.category }}</div>
+                                    {% comment %} Status<div class="form-group mb-2 fw-bold">{{ form.status }}</div> {% endcomment %}
+                                    Tag : <input type="text" value="" name="tagname">
+                                </div>
+                                <div class=' card-footer'>
+                                    <input class="btn btn-outline-dark" type = "submit" value ="Submit">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col sm-2 mx-4 mt-4">
-                <img src="{% static 'images/blogg.jpg' %}"
-                        alt="Blog image" class="w-100 vh-100 shadow-lg " style="object-fit: cover; object-position: center;  border-radius: .50rem;">
-            </div>
         </div>
     </div>
-</div>
+
 
 
 {% endblock %}

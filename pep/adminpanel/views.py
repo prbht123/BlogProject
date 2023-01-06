@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.views.generic.list import ListView
 from blogapp.models import PostBlog
 from blogapp.forms import BlogForm
+from django.utils import timezone
+import datetime
 
 
 class HomeView(View):
@@ -63,9 +65,12 @@ def published(request, pk):
     """
     blog = PostBlog.objects.get(id=pk)
     blog.status = 1
+    date = timezone.now()
+    blog.published_date = timezone.now()
+    print(blog.published_date)
+    print('333333333333333333333333')
+    a = 1
     blog.save()
-    print(request.POST)
-    print("000000000000011111111111111")
     return redirect('adminpanel:listblog')
 
 def unpublished(request, pk):
@@ -78,6 +83,12 @@ def unpublished(request, pk):
     blog.save()
     print(request.POST)
     print("000000000000011111111111111")
+    return redirect('adminpanel:listblog')
+
+def publish_date(request, pk):
+    blog = PostBlog.objects.get(id=pk)
+    blog.published_date = timezone.now()
+    blog.save()
     return redirect('adminpanel:listblog')
 
 
