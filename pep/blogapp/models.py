@@ -53,7 +53,7 @@ class PostBlog(models.Model):
     dislikes = models.ManyToManyField(User, related_name='blogdislike_user')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    published_date = models.DateField(auto_now=True)
+    published_date = models.DateTimeField(auto_now=True)
     slug = models.SlugField( unique=True)
 
     # Function to return number of likes

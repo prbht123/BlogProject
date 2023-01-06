@@ -7,31 +7,31 @@
 
 {% block content %}
 
-
-<div class="bg-dark">
-    <div class ="container d-flex justify-content-center">
-        <div class="d-flex row">
-            <div class="col sm-3">
-                <div class ="card my-4">
-                    <div class ="card-header bg-primary text-white text-center fs-4 fw-bold fw-bold">Update Blog</div>
-                    <div class="card-body">
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class='mb-4'>
-                            {{ form.as_p }}
-                            Tag : <input type="text" value=" {% for i in postblog.tags.all  %} {{ i.name }} {% endfor %}" name="tagname">
-                            </div>
-                            <input type="submit" value="Save">
-                        </form>
+    <div class=" bg-dark" style="background-image: url('https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); ">
+        
+            <div class="row">
+                <div class=" col d-flex justify-content-center p-4">
+                    <div class ="card shadow rounded mx-3 my-4 d-flex justify-content-center">
+                        <div class ="card-header bg-primary text-white text-center fs-4 fw-bold fw-bold" style='font-family:Cursive;'>Update Blog</div>
+                        <div class="card-body ">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class='form-group mb-4  fs-6 fw-bold' style='font-family:Cursive;'>
+                                    Title<div class="form-group mb-2 ">{{ form.title }}</div>
+                                    Content<div class="d-flex form-group mb-2 ">{{ form.content }}</div>
+                                    Image<div class="form-group mb-2 me-2 ">{{ form.image}}</div>
+                                    Category<div class="form-group mb-2 ">{{ form.category }}</div>
+                                    Status<div class="form-group mb-2 ">{{ form.status }}</div>
+                                    Tag : <input type="text" value=" {% for i in postblog.tags.all  %} {{ i.name }} {% endfor %}" name="tagname">
+                                </div>
+                                <input type="submit" value="Save">
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col sm-2 mx-4 mt-4">
-                <img src="{% static 'images/blogg.jpg' %}"
-                        alt="Blog image" class="w-100% vh-100%" style="object-fit: cover; object-position: center; border-radius: .50rem; height:96%; width:100%;">
             </div>
-        </div>
+        
     </div>
 </div>
 

@@ -1,0 +1,72 @@
+{% extends 'adminpanel/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bloghome.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    {% if count > 4 %}
+    
+        <div class="row d-flex justify-content-end me-5" >
+            <h3 class='fw-bold text-center mt-4' style="text-shadow:4px 4px #d3d2d4";>Blogs</h3>
+            <a href="{% url 'blogapp:list' %}" class="btn btn-primary my-4 fs-5 ms-5" style='margin-right:100px; max-width:7rem;max-height:2.7rem;'>Blog List</a>
+        </div>
+        {% endif %}
+        <div class="row d-flex mt-2 justify-content-around" style="margin-left:100px; margin-right:100px;">
+            
+                {% for obj in blog_list %}
+                <div class="card me-4 mb-4 shadow-lg p-3 mb-5 bg-white rounded" style="max-width:18rem;">
+                    <div class="card-header bg-dark text-white fs-3 fw-bold">{{ obj.title }}</div>
+                    <div class='card-body'>
+
+                        <h5 class="card-title">{{ obj.published_date }}</h5>
+                        <img src="{% if obj.image %} {{ obj.image.url }} {% endif %}" class="rounded" style ="max-height:100%; max-width:100%;">
+                        <p class="card-text" >
+                        {{ obj.content|truncatechars:75 }}
+                        </p>
+
+                    </div>
+
+                </div>
+               
+            {% endfor %}
+        
+    </div>
+
+    <hr>
+
+    {% if count > 4 %}
+    <div class="row d-flex justify-content-end me-5">
+        <h3 class='fw-bold  text-center mt-4' style="text-shadow:4px 4px #d3d2d4";>Blogs According to Ratings</h3>
+        <a href="{% url 'blogapp:blograte' %}" class="btn btn-primary my-4 fs-5 ms-5" style='margin-right:100px; max-width:7rem;max-height:2.7rem;'>Blog List</a>
+    </div>
+    {% endif %}
+    <div class="row d-flex mt-2 justify-content-around" style="margin-left:100px; margin-right:100px;">
+        
+            {% for ob in lst %}
+            <div class="card me-4 mb-4 shadow-lg p-3 mb-5 bg-white rounded" style="max-width:18rem; max-height:26rem;">
+                <div class="card-header bg-dark text-white fs-3 fw-bold">{{ ob.post.title }}</div>
+                <div class='card-body'>
+
+                    <h5 class="card-title">{{ ob.post.published_date }}</h5>
+                    <img src="{% if ob.post.image %} {{ ob.post.image.url }} {% endif %}" class="rounded" style ="max-height:100%; max-width:100%;">
+                    <p class="card-text" >
+                    {{ ob.post.content|truncatechars:75 }}
+                    </p>
+                    <hr>
+                    Rating :- {{ ob.rating }}
+                </div>
+
+            </div>
+            
+            {% endfor %}
+        
+    </div>
+</div>
+
+
+{% endblock %}

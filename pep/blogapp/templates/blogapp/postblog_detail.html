@@ -1,6 +1,5 @@
 {% extends 'adminpanel/base.html' %}
 {% load static %}
-<script src="{% static 'js/detail.js' %}"></script>
 
 {% block style %}
 {% load static %}
@@ -15,7 +14,7 @@
         <div class="container d-flex justify-content-center">
             <div class="card bg-blur my-4 ">
                 <div class="card-header bg-dark text-white text-center fs-4 fw-bold">Blog Details</div>
-                <div class="card-body">
+                <div class="card-body fs-5">
                     <hr>
                     <table class="table ">
                         <thead>
@@ -61,8 +60,10 @@
                         </tr>
                         <tr>
                             {% if object.status == '1' %}
-                            <th scope="row">Published Date</th>
-                            <td colspan="2">{{ object.published_date }}</td>
+                                <th scope="row">Published Date</th>
+                                
+                                <td colspan="2">{{ object.published_date }}</td>
+
                             {% endif %}
                         </tr>
                         </tbody>
@@ -72,16 +73,19 @@
 
                 <div class="card-footer mb-3 ">
                     {% if request.user == object.blogger or request.user.is_staff %}
-                    <a class="btn btn-primary mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:edit' pk=object.id %}">Update</a>
-                    <a class="btn btn-warning ms-2 mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:remove' pk=object.id %}">Delete</a>
+                    <div class='d-flex justify-content-between'>
+                        <a class="btn btn-primary mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:edit' pk=object.pk %}">Update</a>
+                        <a class=" btn btn-warning ms-2 mt-2 mb-2 text-decoration-none" href="{% url 'blogapp:remove' pk=object.pk %}">Delete</a>
+                        
+                    </div>
                     <hr>
                     {% endif %} 
                     
-                    <div class="row" style="font-family: georgia;">
-                        <div class ="col-4">
+                    <div class="row " style="font-family: georgia;">
+                        <div class='col-3'>
                             {% if request.user.is_authenticated %}
                             <div class="container">
-                                
+
                                 {% if like %}
                                 <form action="{% url 'blogapp:dislike' pk=object.id %}">
                                     {% csrf_token %}
@@ -107,54 +111,60 @@
 
                                 {% endif %}
                             </div>
-                                
+                               
                             {% endif %}
-                                    <div class="container fs-4 mt-2">
-                                        {% if like_number < 2 %}
-                                        {{ like_number }} Like &nbsp  
-                                        {% else %}
-                                        {{ like_number }} Likes &nbsp  
-                                        {% endif %}
+                            <div class="container fs-4 mt-2 d-flex justify-content-start">
+                                {% if like_number < 2 %}
+                                {{ like_number }} Like &nbsp  
+                                {% else %}
+                                {{ like_number }} Likes &nbsp  
+                                {% endif %}
 
-                                        <br>
+                                <br>
 
-                                        {% if dislike_number < 2 %}
-                                        {{ dislike_number }} Dislike
-                                        {% else %}
-                                        {{ dislike_number }} Dislikes
-                                        {% endif %}
-                                    </div>
-                        </div>            
-
-                        <div class="col-4">
-                            <div class="container fs-4  ">
-                                        {% if user.is_authenticated %}
-                                            {% if request.user not in list %}
-                                            <form action={% url 'blogcomment:rate' pk=object.id %} method="GET">
-                                                {% csrf_token %}
-                                                <fieldset class="rating ">
-                                                    <h3>Please Rate:</h3>
-                                                    <input type="submit" id="star5" name="rating" value="5" /><label for="star5" title="Best">5 stars</label>
-                                                    <input type="submit" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
-                                                    <input type="submit" id="star3" name="rating" value="3" /><label for="star3" title="Average">3 stars</label>
-                                                    <input type="submit" id="star2" name="rating" value="2" /><label for="star2" title="Bad">2 stars</label>
-                                                    <input type="submit" id="star1" name="rating" value="1" /><label for="star1" title="Worst">1 star</label>
-                                                </fieldset>                                           
-
-                                            </form>                    
-                                            
-                                            {% endif %}
-                                        {% endif %}
+                                {% if dislike_number < 2 %}
+                                {{ dislike_number }} Dislike
+                                {% else %}
+                                {{ dislike_number }} Dislikes
+                                {% endif %}
                             </div>
                         </div>
+                        
+                        <div class='col-9 '>
+                            <div class='row'>
+                                <div class='col-md-6'>
+                                    <div class=" container fs-4  "  >
+                                                {% if user.is_authenticated %}
+                                                    {% if request.user not in list %}
+                                                    <form action={% url 'blogcomment:rate' pk=object.id %} method="GET">
+                                                        {% csrf_token %}
+                                                        <fieldset class="rating ">
+                                                            <h3>Please Rate:</h3>
+                                                            <input type="submit" id="star5" name="rating" value="5" /><label for="star5" title="Best">5 stars</label>
+                                                            <input type="submit" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
+                                                            <input type="submit" id="star3" name="rating" value="3" /><label for="star3" title="Average">3 stars</label>
+                                                            <input type="submit" id="star2" name="rating" value="2" /><label for="star2" title="Bad">2 stars</label>
+                                                            <input type="submit" id="star1" name="rating" value="1" /><label for="star1" title="Worst">1 star</label>
+                                                        </fieldset>                                           
 
-                        <div class="col-4">
-                            <div class="container fs-4">
-                                        Rating : <a  class="btn btn-success fw-bold"> {{ rate_avg|stringformat:".1f" }} <i class="fa fa-star"></i><a/>
-                                        <br>
-                                        <span  class="fs-2" id="stars"></span>
-                                        
+                                                    </form>                    
+                                                    
+                                                    {% endif %}
+                                                {% endif %}
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 mt-1">
+                                    <div class="container fs-4"  >
+                                                Rating : <a  class="btn btn-success fw-bold"> {{ rate_avg|stringformat:".1f" }} <i class="fa fa-star"></i><a/>
+                                                <br>
+                                                <span  class="fs-2" id="stars"></span>
+                                                
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
                     
@@ -164,7 +174,6 @@
                         {% if user.is_authenticated %}
                         <form action={% url 'blogcomment:create' pk=object.id %} method="post">
                         {% csrf_token %}
-                        {% comment %} {{ form.as_p }} {% endcomment %}
                         {% render_field form.comment id="comment" class="form-control" placeholder="Comment Here....." type="text" %}
                         <input class="btn btn-outline-success mt-2" type="submit" value="Comment">
                         </form>

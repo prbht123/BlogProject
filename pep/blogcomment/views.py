@@ -46,9 +46,7 @@ def rating(request, pk):
     """
     if request.method == "GET":
         post = PostBlog.objects.get(id=pk)
-        print(post)
         rating = request.GET.get('rating')
         rater = request.user
-        print(rating)
         BlogRatingModel(rater=rater, post=post, rating=rating).save()
         return redirect('blogapp:detail', pk=post.id)

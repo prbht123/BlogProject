@@ -9,7 +9,7 @@
             <p class="fw-bold fs-4">Update Profile</p>
         </div>
         <div class="card-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit" value="Save">

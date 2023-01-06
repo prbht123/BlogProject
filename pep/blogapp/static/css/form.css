@@ -1,5 +1,5 @@
-input[type=submit]{
-    background-color: #04AA6D;
+inputt[type=submitt]{
+    background-color: #1c1e1e;
     border-radius: 25px;
     color: white;
     padding: 16px 32px;
@@ -7,3 +7,4 @@ input[type=submit]{
     margin: 4px 2px;
     cursor: pointer;
   }
+

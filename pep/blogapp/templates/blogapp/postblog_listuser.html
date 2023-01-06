@@ -1,0 +1,115 @@
+{% extends 'adminpanel/base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 d-flex align-items-center bg-dark">
+                <div class="row d-flex " style="font-family:Times; max-width:113%;">
+                    <div class="card bg-warning my-4" >
+                        <h3 class="fw-bold p-5">
+                            House of Blogs</h3>
+                        
+                    </div>
+                    <div class="card bg-dark my-4 d-flex justify-content-center" >
+                        <h2 class="fw-bold mx-5 p-2">
+                            <a href="{% url 'blogapp:create' %}" class="btn  btn-success">Create A Blog</a></h2>
+
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex col-sm-6 justify-content-center vh-100 overflow-auto">
+                <div class="row" >
+                    <nav class="navbar ms-4 mt-3 bg-light">
+                        <div class="container-fluid">
+                          <form class="d-flex" action="{% url 'blogapp:search' %}" role="search" method="get">
+                            <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                          </form>
+                        </div>
+                    </nav>
+
+                    {% if result %}
+                        {% for res in result %}
+                        <div class="col-md-9 mx-3 d-flex justify-content-center">
+                            <div class="card my-4 shadow p-3 mb-5 bg-white rounded">
+                                <div class="card-header bg-dark text-white fs-3 fw-bold">{{ res.title }}</div>
+                                <div class='card-body'>
+                                    
+                                    <h5 class="card-title">{{ res.blogger }}</h5>
+                                    <h5 class="card-title">{{ res.published_date }}</h5>
+                                    <img src="{% if res.image %} {{ res.image.url }} {% endif %}" class="rounded" style ="max-height:100%; max-width:100%;">
+                                    <p class="card-text" >
+                                    {{ res.content|truncatechars:75 }}
+                                    </p>
+                                    
+                                    <a href="{% url 'blogapp:detail' pk=res.id %}" class="btn btn-primary">Read More</a>
+                                </div>
+                                <div class="card-footer">Category :- {{ obj.category }}
+                                    <br>
+                                    {% for i in res.tags.all  %}
+                                    Tags :- {{ i.name }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    
+                    {% endif %}
+
+                    {% if msg %}
+                    {{ msg }}
+                    {% endif %}
+
+                    {% for obj in view.choices %}
+
+                        <div class="col-md-9 mx-3 d-flex justify-content-center">
+                            <div class="card my-4 shadow-lg p-3 mb-5 bg-white rounded">
+                                <div class="card-header bg-dark text-white fs-3 fw-bold">{{ obj.title }}</div>
+                                <div class='card-body'>
+                                    
+                                    <h5 class="card-title">{{ obj.blogger }}</h5>
+                                    <h5 class="card-title">{{ obj.published_date }}</h5>
+                                    <img src="{% if obj.image %} {{ obj.image.url }} {% endif %}" class="rounded" style ="max-height:100%; max-width:100%;">
+                                    <p class="card-text" >
+                                    {{ obj.content|truncatechars:75 }}
+                                    </p>
+                                    
+                                    <a href="{% url 'blogapp:detail' pk=obj.id %}" class="btn btn-primary">Read More</a>
+                                </div>
+                                <div class="card-footer">Category:- {{ obj.category }}
+                                    <br>
+                                    {% for i in obj.tags.all  %}
+                                    Tags :- {{ i.name }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    
+                
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="bg-dark col-sm-3 d-flex align-items-center">
+                <div class="row d-flex ">
+                    
+                        <img src="{% static 'images/picc.jpg' %}" class="rounded p-4 mt-4" alt="Cinque Terre" style="max-width:100%;max-height:100%; border-radius: .50rem;" >                         
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

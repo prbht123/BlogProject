@@ -13,13 +13,16 @@ urlpatterns = [
     path('detail/<int:pk>/',views.BlogDetail.as_view(),name='detail'),
     path('delete/<int:pk>/',views.BlogDelete.as_view(),name='delete'),
     path('list/',views.BlogList.as_view(),name='list'),
+    path('listHome/',views.BlogHome.as_view(),name='bloghome'),
+    path('listRate/',views.BlogListRating.as_view(),name='blograte'),
     path('publish/<int:pk>/', views.publish, name='publish'),
     path('unpublish/<int:pk>/', views.unpublish, name='unpublish'),
     path('remove/<int:pk>/', views.remove, name='remove'),
     path('edit/<int:pk>/', views.edit, name='edit'),
     path('results/', views.SearchView.as_view(), name='search'),
     path('like/<int:pk>/', views.postLike, name='like'),
-    path('dislike/<int:pk>/', views.postDisLike, name='dislike')
+    path('dislike/<int:pk>/', views.postDisLike, name='dislike'),
+    path('list_user/',views.BlogListUser.as_view(),name='listuser'),
 ]
 
 if settings.DEBUG:
