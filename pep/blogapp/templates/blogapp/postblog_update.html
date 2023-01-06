@@ -17,7 +17,6 @@
                             <form method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class='form-group mb-4  fs-6 fw-bold' style='font-family:Cursive;'>
-                                {% comment %} {{ form.as_p }} {% endcomment %}
                                     Title<div class="form-group mb-2 ">{{ form.title }}</div>
                                     Content<div class="d-flex form-group mb-2 ">{{ form.content }}</div>
                                     Image<div class="form-group mb-2 me-2 ">{{ form.image}}</div>

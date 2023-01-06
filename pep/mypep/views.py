@@ -72,4 +72,3 @@ class MyDetailView(View):
         Function to render home page
         """
         return render(request, 'mypep/profilemodel_detail.html')
-

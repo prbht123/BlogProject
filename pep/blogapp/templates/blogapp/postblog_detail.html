@@ -174,7 +174,6 @@
                         {% if user.is_authenticated %}
                         <form action={% url 'blogcomment:create' pk=object.id %} method="post">
                         {% csrf_token %}
-                        {% comment %} {{ form.as_p }} {% endcomment %}
                         {% render_field form.comment id="comment" class="form-control" placeholder="Comment Here....." type="text" %}
                         <input class="btn btn-outline-success mt-2" type="submit" value="Comment">
                         </form>
