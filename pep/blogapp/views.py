@@ -46,19 +46,19 @@ class BlogCreate(LoginRequiredMixin, CreateView):
 
     # Function if the form is valid
     def form_valid(self, form):
-            tag_data = self.request.POST['tagname']
-            tagging  = tag_data.split(',')
-            data = form.save(commit=False)
-            data.blogger = self.request.user
-            data.status = 0
-            data.save()
-            for tag in tagging:
-                try:
-                    var = TagBlog.objects.get(name=tag)
-                    data.tags.add(var)
-                except:
-                    data.tags.create(name=tag)
-            return redirect('blogapp:list')
+        tag_data = self.request.POST['tagname']
+        tagging  = tag_data.split(',')
+        data = form.save(commit=False)
+        data.blogger = self.request.user
+        data.status = 0
+        data.save()
+        for tag in tagging:
+            try:
+                var = TagBlog.objects.get(name=tag)
+                data.tags.add(var)
+            except:
+                data.tags.create(name=tag)
+        return redirect('blogapp:list')
 
 
 class BlogUpdate(LoginRequiredMixin, UpdateView):

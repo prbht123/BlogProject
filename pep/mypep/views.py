@@ -54,7 +54,6 @@ class ProfileUpdate(UpdateView):
     model = ProfileModel
     fields = '__all__'
     template_name='mypep/profilemodel_update.html'
-
     pk_url_kwarg = 'pk'
     success_url = reverse_lazy('mypep:detail')
 
@@ -73,5 +72,4 @@ class MyDetailView(View):
         Function to render home page
         """
         return render(request, 'mypep/profilemodel_detail.html')
-
 
