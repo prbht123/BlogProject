@@ -5,13 +5,27 @@ from django.template.defaultfilters import slugify
 
 
 class BlogCommentModel(models.Model):
+    """
+    Comment Model for blogs to create a comment table
+    """
     author = models.ForeignKey(User,related_name='blogcommmentmodel_author', default=None,on_delete=models.CASCADE)
     blogpost = models.ForeignKey(PostBlog, related_name='blogcommmentmodel_comment', on_delete=models.CASCADE)
     comment = models.TextField(max_length=200)
+    likes = models.ManyToManyField(User, related_name='commentlike_user')
+    dislikes = models.ManyToManyField(User, related_name='commentdislike_user')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField( unique=True)
 
+    # Function to count no. of likes
+    def total_likes(self):
+        return self.likes.count()
+    
+    # Function to count no. of dislikes
+    def total_dislikes(self):
+        return self.dislikes.count()
+    
+    # Function to return unique slug
     def unique_slug(self):
         unique_slugg = slugify(self.comment)
         num = 1
@@ -34,6 +48,9 @@ class BlogCommentModel(models.Model):
 
 
 class BlogRatingModel(models.Model):
+    """
+    Rating Model to create a Rating table for blogs 
+    """
     RATING_CHOICES = (
         ('1', '1'),
         ('2', '2'),
@@ -46,6 +63,7 @@ class BlogRatingModel(models.Model):
     rating = models.CharField(max_length=1, choices = RATING_CHOICES, null=True, blank=True)
     slug = models.SlugField( unique=True)
 
+    # Function to return unique slug
     def unique_slug(self):
         unique_slugg = slugify(self.rating)
         num = 1
@@ -60,7 +78,6 @@ class BlogRatingModel(models.Model):
       if not self.slug:
          self.slug = self.unique_slug()
       return super().save(*args, **kwargs)
-
 
     # Function to return title on table
     def __str__(self):

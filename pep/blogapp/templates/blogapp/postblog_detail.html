@@ -84,50 +84,40 @@
                     <div class="row " style="font-family: georgia;">
                         <div class='col-3'>
                             {% if request.user.is_authenticated %}
-                            <div class="container">
+                            <div class="form-group">
 
-                                {% if like %}
-                                <form action="{% url 'blogapp:dislike' pk=object.id %}">
-                                    {% csrf_token %}
-                                        <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger" id = "dislike"><i class="fas fa-thumbs-down"></i></button>
-                                </form>
-
-                                {% elif dislike %}
-                                <form action="{% url 'blogapp:like' pk=object.id %}">
-                                    {% csrf_token %}
-                                        <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success" id = "like"><i class="fas fa-thumbs-up"></i></button>
-                                </form>
-
-                                {% else %}
-                                <form action="{% url 'blogapp:like' pk=object.id %}">
-                                    {% csrf_token %}
-                                        <button type="submit" name="like" value="{{ object.id }}" class="btn btn-success " id = "like"><i class="fas fa-thumbs-up"></i></button>
-                                </form>
-                                <br>
-                                <form action="{% url 'blogapp:dislike' pk=object.id %}">
-                                    {% csrf_token %}
-                                        <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-danger " id = "dislike"><i class="fas fa-thumbs-down"></i></button>
-                                </form>
-
-                                {% endif %}
+                                <div class='row'>
+                                    <div class='col ps-2 pe-0'>
+                                        <form action="{% url 'blogapp:like' pk=object.id %}" class='fs-4'>
+                                            {% csrf_token %}
+                                            {% if request.user in object.likes.all %}
+                                                <button type="submit" name="like" value="{{ object.id }}" class="btn btn-outline-success " style='color:green;  border:none;' id = "like"><i class="fas fa-thumbs-up" style="font-size:35px"></i></button>
+                                            {% else %}
+                                            <button type="submit" name="like" value="{{ object.id }}" class="btn btn-outline-success " style='color:#AAA;  border:none;' id = "like"><i class="fas fa-thumbs-up" style="font-size:35px"></i></button>
+                                            {% endif %}
+                                            
+                                        </form>
+                                        <div class='fs-3 ms-3'> {{ like_number }}</div>
+                                    </div>
+                                    
+                                    <div class='col p-0 '>
+                                        <form action="{% url 'blogapp:dislike' pk=object.id %}" class='fs-4'>
+                                            {% csrf_token %}
+                                            {% if request.user in object.dislikes.all %}
+                                                <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-outline-danger " style='color:red; border:none;' id = "dislike"><i class="fas fa-thumbs-down" style="font-size:35px"></i></button>
+                                            {% else %}
+                                            <button type="submit" name="dislike" value="{{ object.id }}" class="btn btn-outline-danger " style='color:#AAA;  border:none;' id = "dislike"><i class="fas fa-thumbs-down" style="font-size:35px"></i></button>
+                                            {% endif %}
+                                            
+                                        </form>
+                                        <div class='fs-3 ms-3'> {{ dislike_number }}</div>
+                                    </div>
+                                </div>
+                     
                             </div>
                                
                             {% endif %}
-                            <div class="container fs-4 mt-2 d-flex justify-content-start">
-                                {% if like_number < 2 %}
-                                {{ like_number }} Like &nbsp  
-                                {% else %}
-                                {{ like_number }} Likes &nbsp  
-                                {% endif %}
-
-                                <br>
-
-                                {% if dislike_number < 2 %}
-                                {{ dislike_number }} Dislike
-                                {% else %}
-                                {{ dislike_number }} Dislikes
-                                {% endif %}
-                            </div>
+                            
                         </div>
                         
                         <div class='col-9 '>
@@ -153,7 +143,6 @@
                                                 {% endif %}
                                     </div>
                                 </div>
-
 
                                 <div class="col-md-6 mt-1">
                                     <div class="container fs-4"  >
@@ -183,18 +172,48 @@
                     </div><hr>
 
 
-                    <div class="container-fluid my-3 ms-3 fs-5" style="font-family:Times">
+                    <div class="container-fluid my-3  fs-5" id='hi' style="font-family:Times">
                         <div class="row d-flex">
                             <div class="col-sm-9  ">
                                 <h3>Previous Comments</h3>
                                 <div class="container-fluid" id="list1">
-                                    <table class="table" style="table-layout:fixed">
+                                    <table class="table" style="table-layout:fixed" >
                                         <tbody>
                                             {% for com in comment_list %}
                                             <tr>
-                                                <td style="width:25%"><img src="{{ com.author.profilemodel.user_image.url }}" class="rounded rounded-circle " style="width:25%;max-height:10%;"> {{ com.author }}</td>
-                                                <td>{{ com.comment }}<br>Date :- {{ com.updated_at }}</td>
-                                                
+                                                <td id='main' ><img src="{{ com.author.profilemodel.user_image.url }}" class=" " > <div class='mt-1'>{{ com.author }}</div></td>
+   
+                                                <td id='txt'> <div >{{ com.comment }}</div> <br> {% if request.user == com.author %} <a class ='btn btn-primary mt-1' href ="{% url 'blogcomment:comment_edit' pk=com.pk %}">Edit</a> {% endif %} {% if request.user == com.author or request.user == object.blogger %} <a class ='btn btn-warning mt-1' href ="{% url 'blogcomment:comment_remove' pk=com.pk %}">Delete</a> <br> {% endif %} Date :- {{ com.updated_at }}</td>
+
+                                                <td>
+                                                    <form action="{% url 'blogcomment:liked' %}" method="post">
+                                                        {% csrf_token %}
+                                                        
+                                                        {% if  request.user in com.likes.all %}
+                                                        <button type='submit' value="{{ com.id }}" name='liked' id="liked" class = "btn btn-outline-success" style="border:none; color:green; "><i class="fas fa-thumbs-up fa-lg" style='font-size:25px;' aria-hidden="true"></i></button>
+                                                        
+                                                        {% else %}
+                                                        <button type='submit' value="{{ com.id }}" name='liked' id="liked" class = "btn btn-outline-success" style="border:none; color: #AAA;"><i class="fas fa-thumbs-up fa-lg" style='font-size:25px;' aria-hidden="true"></i></button>
+                                                        
+                                                        {% endif %}
+                                                        {{ com.total_likes }}
+
+                                                    </form>
+                                                    <br>
+
+                                                    <form action="{% url 'blogcomment:disliked' %}" method="post">
+                                                        {% csrf_token %}
+
+                                                        {% if  request.user in com.dislikes.all %}
+                                                        <button type='submit' value="{{ com.id }}" name='disliked' id="disliked" class = "btn btn-outline-danger" style="border:none; color: red;"><i class="fas fa-thumbs-down fa-lg" style='font-size:25px;'></i></button>
+                                                        {% else %}
+                                                        <button type='submit' value="{{ com.id }}" name='disliked' id="disliked" class = "btn btn-outline-danger" style="border:none; color: #AAA;"><i class="fas fa-thumbs-down fa-lg" style='font-size:25px;'></i></button>
+                                                        {% endif %}
+
+                                                        {{ com.total_dislikes }}
+                                                    </form>
+                                                </td>
+                                 
                                             </tr>
                                             {% endfor %}
 
@@ -202,14 +221,43 @@
                                     </table>
                                 </div>
 
-                                <div class="container-fluid" id="list2" style="display:none">
+                                
+                                <div class="container-fluid vh-100 overflow-auto" id="list2" style="display:none">
                                     <table class="table" style="table-layout:fixed">
                                         <tbody>
                                             {% for c in postblog.blogcommmentmodel_comment.all reversed %}
                                             <tr>
-                                                <td style="width:25%"> <img src="{{ c.author.profilemodel.user_image.url }}" class="rounded rounded-circle" style="max-width:15%;max-height:5%;">  {{ c.author }}</td>
-                                                <td >{{ c.comment }}<br>Date :- {{ c.updated_at }}</th>
-                                                
+                                                <td id='main1' > <img src="{{ c.author.profilemodel.user_image.url }}" class="rounded rounded-circle" > {{ c.author }}</td>
+                                                <td><div class='fs-4'>{{ c.comment }}</div> <br> {% if request.user == c.author %} <a class ='btn btn-primary' href ="{% url 'blogcomment:comment_edit' pk=c.pk %}">Edit</a> {% endif %} {% if request.user == c.author or request.user == object.blogger %} <a class ='btn btn-warning' href ="{% url 'blogcomment:comment_remove' pk=c.pk %}">Delete</a> {% endif %} <br>Date :- {{ c.updated_at }}</th>
+
+                                                    <td>
+                                                        <form action="{% url 'blogcomment:liked' %}" method="post">
+                                                            {% csrf_token %}
+                                                            
+                                                            {% if  request.user in c.likes.all %}
+                                                            <button type='submit' value="{{ c.id }}" name='liked' id="liked" class = "btn btn-outline-success" style="cursor: pointer;border:none; color:green; "><i class="fas fa-thumbs-up fa-lg" style='font-size:25px;' aria-hidden="true"></i></button>
+                                                            
+                                                            {% else %}
+                                                            <button type='submit' value="{{ c.id }}" name='liked' id="liked" class = "btn btn-outline-success" style="cursor: pointer;border:none; color: #AAA;"><i class="fas fa-thumbs-up fa-lg" style='font-size:25px;' aria-hidden="true"></i></button>
+                                                            
+                                                            {% endif %}
+                                                            {{ c.total_likes }}
+    
+                                                        </form>
+                                                        <br>
+                                                        <form action="{% url 'blogcomment:disliked' %}" method="post">
+                                                            {% csrf_token %}
+    
+                                                            {% if  request.user in c.dislikes.all %}
+                                                            <button type='submit' value="{{ c.id }}" name='disliked' id="disliked" class = "btn btn-outline-danger" style="border:none; color: red;"><i class="fas fa-thumbs-down fa-lg" style='font-size:25px;'></i></button>
+                                                            {% else %}
+                                                            <button type='submit' value="{{ c.id }}" name='disliked' id="disliked" class = "btn btn-outline-danger" style="border:none; color: #AAA;"><i class="fas fa-thumbs-down fa-lg" style='font-size:25px;'></i></button>
+                                                            {% endif %}
+    
+                                                            {{ c.total_dislikes }}
+                                                        </form>
+                                                    </td>
+
                                             </tr>
                                             {% endfor %}
 
@@ -217,7 +265,7 @@
                                     </table>
                                 </div>
 
-                                <input type="button" class = " btn btn-outline-primary ms-3" id="myBtn" value="Show All Comments" onclick="myFunction()" style="width:10rem">
+                                <input type="button" class = " btn btn-outline-primary ms-3" id="myBtn" value="Show All Comments" onclick="myFunction()" style="width:12rem">
                             </div> 
                         </div>
                     </div>
@@ -225,6 +273,71 @@
         </div>
     </div>
 
+    <style>
+
+        #main{
+            width:25%;
+        }
+
+        #txt{
+            font-size:22px;
+        }
+
+        #main img{
+            width:25%;
+            height:50px;
+            max-height:10%;
+            border-radius:50%;
+        }
+        
+        #main1{
+            width:25%;
+        }
+
+        #main1 img{
+            width:25%;
+            max-height:10%;
+            height:50px;
+            border-radius:50%;
+        }
+
+        @media screen and (max-width:850px){
+            
+            #main img{
+                
+                width:50px;
+            }
+          }
+        
+        @media screen and (max-width:450px){
+            
+            #main img{
+                
+                width:35px;
+            }
+            #txt {
+                font-size:20px;
+              }
+          }
+          
+
+        @media screen and (max-width:850px){
+            
+            #main1 img{
+                
+                width:50px;
+            }
+          }
+        
+        @media screen and (max-width:450px){
+            
+            #main1 img{
+                
+                width:35px;
+            }
+          }
+
+    </style>
 
     <script>
 

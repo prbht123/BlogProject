@@ -16,10 +16,10 @@
             <a href="{% url 'blogapp:list' %}" class="btn btn-primary my-4 fs-5 ms-5" style='margin-right:100px; max-width:7rem;max-height:2.7rem;'>Blog List</a>
         </div>
         {% endif %}
-        <div class="row d-flex mt-2 justify-content-around" style="margin-left:100px; margin-right:100px;">
+        <div id='row1' class="row d-flex mt-2 justify-content-around" style="">
             
                 {% for obj in blog_list %}
-                <div class="card me-4 mb-4 shadow-lg p-3 mb-5 bg-white rounded" style="max-width:18rem;">
+                <div id='cardd' class="card me-4 mb-4 shadow-lg p-3 mb-5 bg-white rounded" style="">
                     <div class="card-header bg-dark text-white fs-3 fw-bold">{{ obj.title }}</div>
                     <div class='card-body'>
 
@@ -40,15 +40,15 @@
     <hr>
 
     {% if count > 4 %}
-    <div class="row d-flex justify-content-end me-5">
+    <div class="row d-flex justify-content-end me-4">
         <h3 class='fw-bold  text-center mt-4' style="text-shadow:4px 4px #d3d2d4";>Blogs According to Ratings</h3>
         <a href="{% url 'blogapp:blograte' %}" class="btn btn-primary my-4 fs-5 ms-5" style='margin-right:100px; max-width:7rem;max-height:2.7rem;'>Blog List</a>
     </div>
     {% endif %}
-    <div class="row d-flex mt-2 justify-content-around" style="margin-left:100px; margin-right:100px;">
+    <div  id='row2' class="row d-flex mt-2 justify-content-around" style="">
         
             {% for ob in lst %}
-            <div class="card me-4 mb-4 shadow-lg p-3 mb-5 bg-white rounded" style="max-width:18rem; max-height:26rem;">
+            <div id='carddd' class="card me-4 mb-4 shadow-lg p-3 mb-5 bg-white rounded" style="">
                 <div class="card-header bg-dark text-white fs-3 fw-bold">{{ ob.post.title }}</div>
                 <div class='card-body'>
 
@@ -68,5 +68,141 @@
     </div>
 </div>
 
+<style>
+
+    #row1{
+        margin-left:100px;
+        margin-right:100px;
+    }
+    
+    #cardd{
+        max-width:18rem;
+    }
+
+    #row2{
+        margin-left:100px;
+        margin-right:100px;
+    }
+    
+    #carddd{
+        max-width:18rem; 
+        max-height:26rem;
+    }
+    
+    @media screen and (max-width:850px){
+        #row1{
+            margin-left:50px;
+            margin-right:50px;
+        }
+        
+    }
+
+    @media screen and (max-width:750px){
+        #row1{
+            margin-left:50px;
+            margin-right:50px;
+        }
+
+        #cardd{
+            max-width:14rem;
+        }
+        
+    }
+
+    @media screen and (max-width:630px){
+        #row1{
+            margin-left:20px;
+            margin-right:20px;
+        }
+
+        #cardd{
+            max-width:14rem;
+        }
+        
+    }
+
+    @media screen and (max-width:561px){
+        #row1{
+            margin-left:20px;
+            margin-right:20px;
+        }
+
+        #cardd{
+            max-width:12rem;
+        }
+        
+    }
+    @media screen and (max-width:500px){
+        #row1{
+            margin-left:20px;
+            margin-right:20px;
+        }
+
+        #cardd{
+            max-width:24rem;
+        }
+        
+    }
+
+
+    @media screen and (max-width:850px){
+        #row2{
+            margin-left:50px;
+            margin-right:50px;
+        }
+        
+    }
+
+    @media screen and (max-width:750px){
+        #row2{
+            margin-left:50px;
+            margin-right:50px;
+        }
+
+        #carddd{
+            max-width:14rem;
+        }
+        
+    }
+
+    @media screen and (max-width:630px){
+        #row2{
+            margin-left:20px;
+            margin-right:20px;
+        }
+
+        #carddd{
+            max-width:14rem;
+        }
+        
+    }
+
+    @media screen and (max-width:561px){
+        #row2{
+            margin-left:20px;
+            margin-right:20px;
+        }
+
+        #carddd{
+            max-height:30rem;
+            max-width:12rem;
+        }
+        
+    }
+    @media screen and (max-width:500px){
+        #row2{
+            margin-left:20px;
+            margin-right:20px;
+        }
+
+        #carddd{
+            max-height:30rem;
+            max-width:24rem;
+        }
+        
+    }
+
+
+</style>
 
 {% endblock %}
