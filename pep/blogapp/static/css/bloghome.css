@@ -1,3 +1,137 @@
 .btn-primary:hover{
     background-color:black
 }
+
+
+#row1{
+    margin-left:100px;
+    margin-right:100px;
+}
+
+#cardd{
+    max-width:18rem;
+}
+
+#row2{
+    margin-left:100px;
+    margin-right:100px;
+}
+
+#carddd{
+    max-width:18rem; 
+    max-height:26rem;
+}
+
+@media screen and (max-width:850px){
+    #row1{
+        margin-left:50px;
+        margin-right:50px;
+    }
+    
+}
+
+@media screen and (max-width:750px){
+    #row1{
+        margin-left:50px;
+        margin-right:50px;
+    }
+
+    #cardd{
+        max-width:14rem;
+    }
+    
+}
+
+@media screen and (max-width:630px){
+    #row1{
+        margin-left:20px;
+        margin-right:20px;
+    }
+
+    #cardd{
+        max-width:14rem;
+    }
+    
+}
+
+@media screen and (max-width:561px){
+    #row1{
+        margin-left:20px;
+        margin-right:20px;
+    }
+
+    #cardd{
+        max-width:12rem;
+    }
+    
+}
+@media screen and (max-width:500px){
+    #row1{
+        margin-left:20px;
+        margin-right:20px;
+    }
+
+    #cardd{
+        max-width:24rem;
+    }
+    
+}
+
+
+@media screen and (max-width:850px){
+    #row2{
+        margin-left:50px;
+        margin-right:50px;
+    }
+    
+}
+
+@media screen and (max-width:750px){
+    #row2{
+        margin-left:50px;
+        margin-right:50px;
+    }
+
+    #carddd{
+        max-width:14rem;
+    }
+    
+}
+
+@media screen and (max-width:630px){
+    #row2{
+        margin-left:20px;
+        margin-right:20px;
+    }
+
+    #carddd{
+        max-width:14rem;
+    }
+    
+}
+
+@media screen and (max-width:561px){
+    #row2{
+        margin-left:20px;
+        margin-right:20px;
+    }
+
+    #carddd{
+        max-height:30rem;
+        max-width:12rem;
+    }
+    
+}
+@media screen and (max-width:500px){
+    #row2{
+        margin-left:20px;
+        margin-right:20px;
+    }
+
+    #carddd{
+        max-height:30rem;
+        max-width:24rem;
+    }
+    
+}
+

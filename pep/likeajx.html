@@ -1,0 +1,43 @@
+$(document).ready(function(event){
+    console.log("Heyyy")
+    $(document).on('click', '#liked', function(event){
+        event.preventDefault();
+        var pk = $(this).attr('value');
+        $.ajax({
+            type: 'GET',
+            url: '{% url "blogapp:liked"  %}',
+            data: {
+                'id': pk,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            
+            success: function(data){
+                console.log(data)
+
+            },
+            
+        });
+    });
+});
+
+$(document).ready(function(event){
+    console.log("Heyyy")
+    $(document).on('click', '#disliked', function(event){
+        event.preventDefault();
+        var pk = $(this).attr('value');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "blogapp:disliked"  %}',
+            data: {
+                'id': pk,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            datatype: 'json',
+            success: function(response){
+                $('#list1').html(response['form'])
+
+            },
+            
+        });
+    });
+});

@@ -1,6 +1,6 @@
 from django.urls import path
 from blogapp import views
-from blogapp.views import Blogging, BlogCreate, publish
+from blogapp.views import Blogging, BlogCreate
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -15,8 +15,6 @@ urlpatterns = [
     path('list/',views.BlogList.as_view(),name='list'),
     path('listHome/',views.BlogHome.as_view(),name='bloghome'),
     path('listRate/',views.BlogListRating.as_view(),name='blograte'),
-    path('publish/<int:pk>/', views.publish, name='publish'),
-    path('unpublish/<int:pk>/', views.unpublish, name='unpublish'),
     path('remove/<int:pk>/', views.remove, name='remove'),
     path('edit/<int:pk>/', views.edit, name='edit'),
     path('results/', views.SearchView.as_view(), name='search'),

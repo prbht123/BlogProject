@@ -22,6 +22,7 @@ import datetime
 import operator
 from operator import itemgetter
 from decimal import Decimal
+from django.template.loader import render_to_string
 
 
 class Blogging(View):
@@ -39,7 +40,6 @@ class BlogCreate(LoginRequiredMixin, CreateView):
     """
     login_url = '/mypep/login'
     redirect_field_name = 'login'
-
     form_class = BlogForm
     template_name = "blogapp/postblog_form.html"
     success_url = reverse_lazy('blogapp:list')
@@ -170,23 +170,6 @@ def postDisLike(request, pk):
     return redirect('blogapp:detail', pk=blog.id)
 
 
-# function to change blog status from draft to publish
-def publish(request, pk):
-    blog = PostBlog.objects.get(id=pk)
-    blog.status = 1
-    blog.published_date = timezone.now()
-    blog.save()
-    return redirect('blogapp:detail', pk=blog.id)
-
-# function to change blog status from publish to unpublish
-def unpublish(request, pk):
-    blog = PostBlog.objects.get(id=pk)
-    blog.status = 2
-    blog.published_date = None
-    blog.save()
-    return redirect('blogapp:detail', pk=blog.id)
-
-
 # Function to delete a blog
 def remove(request, pk):
     blog = PostBlog.objects.get(id=pk)
@@ -195,6 +178,7 @@ def remove(request, pk):
     else:
         return HttpResponse("not authorized!!!!")
     return redirect('blogapp:detail', pk=blog.id)
+
 
 # Function to update a blog
 def edit(request, pk):
@@ -287,6 +271,7 @@ class BlogListRating(ListView):
     form_class = BlogForm
     template_name = "blogapp/postblog_list.html"
 
+    # function to pass context to show only published blogs sorted according to ratings
     def get_context_data(self,  *args, **kwargs):
         context = super().get_context_data(**kwargs)
         posts = PostBlog.objects.filter(status=1)
