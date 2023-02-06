@@ -1,0 +1,83 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<div class="container-fluid " id='bg'  style="background-image: url('https://images.unsplash.com/photo-1542219550-2da790bf52e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80');">
+    <div class='row d-flex justify-content-center'>
+        <div class='col-6 '>
+            <div class='card shadow-lg my-5'>
+                <div class='card-header '>
+                    <h2>Update Product</h2>
+                </div>
+
+                <div class='card-body'>
+                    <form method="post" enctype="multipart/form-data" >
+                        {% csrf_token %}
+
+                        <div class="row fs-5 " style="font-family:Times;">
+                            <div class='col '>
+                                <p class='text-secondary'>Name
+                                {% render_field form.name class="form-control" placeholder="Name" type="text" %}
+                                </p>
+                                <p class='text-secondary'>Price
+                                {% render_field form.price class="form-control" placeholder="Price" type="text" %}
+                                </p>
+
+                                <p class='text-secondary'>Description
+                                {% render_field form.description class="form-control" placeholder="Description" type="text" %}
+                                </p>
+                                <p class='text-secondary'>Company
+                                {% render_field form.company class="form-control" placeholder="Company" type="text" %}
+                                </p>
+                                <div class="form-group mb-2 text-secondary "> Tag :<br> <input type="text" value="{% for i in productmodel.tags.all  %} {{ i.name|cut:" " }} {% endfor %}" name="tagname"></div>
+                                <div class="form-group mb-2 text-secondary">Category :<br> <input type="text" value="{{ productmodel.category.title|cut:" " }}" name="categoryname"></div>
+                                <p class='text-secondary fw-normal'>Image :<div class="form-group mb-2 ">{{form.image}}</div></p>
+                                <div class="form-group mb-2 text-secondary">Manufacturing Date :<br> <input type="date" value="{{ f }} " name="manufacturing date"></div>
+                                <div class="form-group mb-2 text-secondary">Expiry Date :<br> <input type="date" value="" name="expiry date"></div>
+                            </div>
+
+                            <div class='col'>
+                                <p class='text-secondary'>Street
+                                {% render_field form.street class="form-control" placeholder="Street" type="text" %}  
+                                </p>
+                                <p class='text-secondary'>City
+                                {% render_field form.city class="form-control" placeholder="City" type="text" %}
+                                </p>
+                                <p class='text-secondary'>State
+                                {% render_field form.state class="form-control" placeholder="State" type="text" %}
+                                </p>
+                                <p class='text-secondary'>Country
+                                {% render_field form.country class="form-control" placeholder="Country" type="text" %}
+                                </p>
+                                <p class='text-secondary'>Pin Code
+                                {% render_field form.pin_code class="form-control" placeholder="Pin Code" type="text" %}
+                                </p>
+                                <p class='text-secondary'>Latitude
+                                {% render_field form.latitude class="form-control" placeholder="Latitude" type="text" %}
+                                </p>
+                                <p class='text-secondary'>Longitude
+                                {% render_field form.longitude class="form-control" placeholder="Longitude" type="text" %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class='mt-3 card-footer'>
+                            <input class="btn btn-outline-dark" type = "submit" value ="Submit">
+                        </div> 
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

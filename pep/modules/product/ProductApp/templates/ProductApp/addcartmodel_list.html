@@ -1,0 +1,86 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-9">
+        <h2 class="text-center mt-4 fw-bold mb-3" style="text-shadow:4px 4px #d3d2d4">CART ITEMS</h2>
+        <div class="row">
+            {% for object in object_list %}
+                {% for ob in object.product.all %}
+                <div class="col-md-3 col-sm-6 mb-4 mx-4">
+                    <div class="card shadow-lg my-5">
+                    <img style='max-height :16rem;' src="{% if ob.product.image %} {{ ob.product.image.url }} {% endif %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ob.product }}</h5>
+                        <p class="card-text">Rs. {{ ob.product.price }}</p>
+                        <p class="card-text">Quantity - {{ ob.quantity }}
+                            <a href="/product/updatecart/{{ ob.id }}"><i class="fas fa-edit"></i></a>
+                        </p>
+                        <a href="/product/detail/{{ ob.product.id }}/" class="btn btn-outline-primary">More Details</a>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'ProductApp:removecart' pk=ob.product.id %}" class="btn btn-warning">Remove From Cart</a>
+                    </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card shadow-lg bg-dark my-4">
+            
+          <div class="card-body text-white">
+            <table class="table text-white">
+                
+                <tbody>
+                    <tr>
+                        <td class='fs-4 mb-2'>Order Summary<br>( {{items}}{% if items < 2 %} Item {% else %}  Items ){% endif %} </td>
+                    </tr>
+                  <tr>
+                    <td>Total MRP</td>
+                    <td class="text-right">Rs. {{ amount }}</td>
+                  </tr>
+                  <tr>
+                    <td>Delivery Charge</td>
+                    <td class="text-right">Rs. 0</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-bold">Total Amount</td>
+                    <td class="fw-bold text-right">Rs. {{ amount }}</td>
+                  </tr>
+                </tbody>
+              </table>    
+          
+            {% for object in object_list %}
+            <a href="{% url 'ProductApp:ordercart' pk=object.id %}" class="btn btn-primary">Proceed to Buy All</a>
+            {% endfor %}
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .card-img-top {
+        height: 200px;
+        object-fit: cover;
+      }
+      
+  </style>
+
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class='container-fluid my-5'>
+
+    <h1>Order Detail</h1>
+    <table>
+      <tr>
+        <td>Order ID:</td>
+        <td>{{ object.id }}</td>
+      </tr>
+      <tr>
+        <td>Order Date:</td>
+        <td>{{ object.created_at }}</td>
+      </tr>
+      <tr>
+        <td>Customer Name:</td>
+        <td>{{object.ordered_by}}</td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td>{{object.street}}, {{object.city}} - {{object.pin_code}}</td>
+      </tr>
+      {% if object.cart %}
+      <tr>
+        <td>Product:</td>
+        <td>{{ object.cart.product.name }}</td>
+      </tr>
+      <tr>
+        <td>Quantity:</td>
+        <td>{{ object.quantity }}</td>
+      </tr>
+      {% else %}
+      {% for item in cartlist %}
+            {% for i in item.product.all %}
+            <tr>
+                <td>Product:</td>
+                <td># {{i.product}}</td>
+            </tr>
+            <tr>
+                <td>Quantity:</td>
+                <td>{{i.quantity}}</td>
+            </tr>
+            {% endfor %}
+       {% endfor %}
+       {% endif %}
+      <tr>
+        <td>Contact Number:</td>
+        <td>{{object.mobile_number}}</td>
+      </tr>
+      
+    </table>
+  
+</div>
+
+<style>
+    
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+        font-family: Arial, sans-serif;
+        font-size: 36px;
+        font-weight : bold;
+        color: #333;
+        text-shadow: 2px 2px #dddddd;
+      }
+      table {
+        width: 80%;
+        margin: 40px auto;
+        border-collapse: collapse;
+        box-shadow: 0px 0px 10px #dddddd;
+        border-radius: 10px;
+        background-color: #fff;
+      }
+      td, th {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #dddddd;
+        font-weight: bold;
+        color: #333;
+      }
+      tr:nth-child(even) {
+        background-color: #787e87;
+      }
+      .table-header {
+        background-color: #333;
+        color: #fff;
+        border-radius: 10px 10px 0px 0px;
+      }
+      .table-header th {
+        background-color: #333;
+        color: #fff;
+      }
+      
+      table {
+        width: 60%;
+        text-align: center;
+        border-spacing: 0;
+      }
+      td, th {
+        padding: 20px;
+      }
+      th {
+        background-color: #333;
+        color: #fff;
+        border-bottom: 2px solid #ddd;
+      }
+      tr:nth-child(even) {
+        background-color: #ebeef2;
+      }
+      td {
+        border-bottom: 1px solid #ddd;
+      }
+  </style>
+
+{% endblock %}

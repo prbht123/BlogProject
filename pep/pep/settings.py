@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "blogapp",
     "blogcomment",
     "fontawesomefree",
-    "widget_tweaks"
+    "widget_tweaks",
+    "modules.product.ProductApp"
 ]
 
 MIDDLEWARE = [

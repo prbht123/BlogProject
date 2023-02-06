@@ -1,0 +1,50 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg bg-dark shadow " style="font-family: Cursive;">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white fs-4 fw-bold"  href="{% url 'ProductApp:home' %}">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse fs-5" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+          <li class="nav-item ">
+            
+            <a class="nav-link active text-white" aria-current="page" href="{% url 'ProductApp:productlist' %}">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'blogapp:bloghome' %}">Blogs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="">About Us</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav d-flex ">
+            <li class="nav-item me-4 ">
+              {% if request.user.is_superuser %}
+              <a class="nav-link active text-white" aria-current="page" href="{% url 'adminpanel:home' %}">Admin</a>
+              {% endif %}
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle  text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                User Profile
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'ProductApp:cartlist' %}">Cart</a>
+                <a class="dropdown-item" href="{% url 'ProductApp:orderlist' %}">Order</a>
+                <a class="dropdown-item" href="{% url 'mypep:detail' %}">Profile</a>
+              </div>
+            </li>
+
+        </ul>
+
+      </div>
+    </div>
+</nav>
+
+<style>
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+</style>

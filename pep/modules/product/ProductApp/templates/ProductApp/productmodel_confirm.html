@@ -1,0 +1,22 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class = "text-center">
+    <form method="post">
+        {% csrf_token %}
+ 
+        <h2>Are you sure you want to delete this product<br> "{{ object }}"?</h2>
+
+            <input type="submit" value="Confirm">
+        </form>
+        <a href = "/product/detail/{{ object.id }}/"> Cancel</a>
+    </div>
+
+{% endblock %}
