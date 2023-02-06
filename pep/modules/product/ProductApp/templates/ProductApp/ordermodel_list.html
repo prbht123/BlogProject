@@ -1,0 +1,74 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<div class='container-fluid'>
+
+    <div id='products' class='row text-center '>
+        <h2 class='my-3 fw-bold' style="text-shadow:4px 4px #d3d2d4";>ORDERS</h2>
+    </div>
+
+    <div  class='row'>
+
+        {% for object in object_list %}
+        <div class="col-md-3 col-sm-6">
+
+            <div class="card shadow-lg my-5" style="width: 18rem;  margin-left: 15%">
+
+                <div class="card-body">
+                    <h5 class="card-title">{% if object.cart %} {{ object.cart.product }} {% else %} Cart {% endif %}</h5>
+                    <div class='card-title content'>
+                        <h6>Ordered By - {{ object.ordered_by }}</h6>
+                    </div>
+                    <h6 class="card-text">Quantity - {{ object.quantity }}</h6>
+
+                </div>
+
+                <div class='card-footer' >
+                    {% for i in p %}
+
+                        {% if i.order == object %}
+
+                            {% if i.status == '0' %}
+
+                                <a href='' class = 'btn btn-success'>Paid</a>
+
+                            {% else %}
+                                {% if i.order.addcart %}
+                                <a href='{% url "ProductApp:paymentcart" pk=i.order.id %}' class = 'btn btn-warning'>Pay Now</a>
+                                {% elif i.order.cart %}
+                                <a href='{% url "ProductApp:payment" pk=i.order.id %}' class = 'btn btn-warning'>Pay Now</a>
+                                {% endif %}
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if object not in lst %}
+                            {% if object.addcart %}
+                            <a href='{% url "ProductApp:paymentcart" pk=object.id %}' class = 'btn btn-warning'>Pay Now</a>
+                            {% elif object.cart %}
+                            <a href='{% url "ProductApp:payment" pk=object.id %}' class = 'btn btn-warning'>Pay Now</a>
+                            {% endif %}
+                    {% endif %}
+
+                    <a class='btn btn-outline-primary mx-2' href='{% url "ProductApp:orderdetail" pk=object.id %}' style="text-decoration:none"> Order Details</a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

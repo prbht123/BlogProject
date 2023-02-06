@@ -25,7 +25,8 @@ urlpatterns = [
     path("mypep/", include('mypep.urls')),
     path("adminpanel/", include('adminpanel.urls')),
     path("blogapp/", include('blogapp.urls')),
-    path("blogcomment/", include('blogcomment.urls'))
+    path("blogcomment/", include('blogcomment.urls')),
+    path("product/",include('modules.product.ProductApp.urls', namespace='product'))
 ]
 
 if settings.DEBUG:

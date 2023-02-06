@@ -1,0 +1,92 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<div class='row bg-dark d-flex justify-content-center'>
+    <div class='col-8 d-flex justify-content-center'>
+        <div class='card shadow-lg my-5' >
+            <div class='card-header'>
+                <h2 class='fw-bold'>Order Your Product</h2>
+                
+                <h5 class='text-secondary'>Please fill and verify that information given is correct </h5>
+            </div>
+            <div class='card-body p-0' >
+                
+                <form method = "POST"  enctype = "multipart/form-data">
+                    {% csrf_token%}
+                    <div class="row g-0 " style="font-family:;">
+                        <h3 class=" fw-bold d-flex ms-4 my-2" style='width:100%; font-family:Candara'>Cart Products</h3>
+                        <h4 class=" d-flex ms-4 my-2" style='width:100%; font-family:Candara'> {% for i in lst %} # {{ i.name }} <br> {% endfor %}</h4>
+                        <hr>
+                        <div class='fs-5  col-12 col-md-6 p-4'>
+                            <h3 class="fw-normal mb-4" style='font-family:Times'>General Information</h3>
+                            <p class='text-secondary'>Name
+                            {% render_field form.ordered_by class="form-control" placeholder="Name" type="text" %}   
+                            </p>
+                            {% render_field form.email class="form-control" placeholder="Email" type="text" %}<br>    
+                            {% render_field form.mobile_number class="form-control" placeholder="Mobile Number"  type="text" %}<br>
+                             <div class='fw-bold'> Total Amount - Rs. {{ amount }}</div>
+                        </div>
+                        
+                        <div class='fs-5 p-4 col-12 col-md-6' >
+                            <h3 class="fw-normal " style='margin-bottom:50px; font-family:Times;'>Contact Details</h3>
+                            <div id='address1'>
+                                <h4> Choose Address : </h4>
+                                {% for a in address %}
+                                <div class ='card text-center my-3'>
+                                    <input type="radio" id="add11" name="add11" value={{a}}>
+                                    <label for="add11"> {{a.street}}, {{a.city}}, <br>{{a.state}}, {{a.country}} - {{a.pin_code}}, <br> {{a.latitude}}, {{a.longitude}} </label><br>
+                                </div>
+                                {% endfor %}
+                                <h4>If none of the above address</h4>
+                                <input type="button" class='btn btn-outline-dark' value="Click" onclick="myFunction()" style="width:12rem">
+                            </div>
+                            
+                            <div id='address2' style="display:none">
+                                {% render_field form.street class="form-control" placeholder="Street" type="text" %}<br>
+                                {% render_field form.city class="form-control" placeholder="City" type="text" %}<br>
+                                {% render_field form.state class="form-control" placeholder="State" type="text" %}<br>
+                                {% render_field form.country class="form-control" placeholder="Country" type="text" %}<br>
+                                {% render_field form.pin_code class="form-control" placeholder="Pin Code" type="text"  %}<br>
+                                {% render_field form.latitude class="form-control" placeholder="Latitude" type="text" %}<br>
+                                {% render_field form.longitude class="form-control" placeholder="Longitude" type="text" %}<br>
+                
+                                <input type="button" class='btn btn-outline-dark' value="Choose Address" onclick="myFunction()" style="width:12rem">
+                            </div>
+                        </div>
+                    </div>
+                    <div class='text-center card-footer'>
+                        <input class="my-2 btn btn-dark" type = "submit" value ="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function myFunction() {
+        var x = document.getElementById("address1");
+        var y = document.getElementById("address2");
+
+          if (x.style.display == "none") {
+              x.style.display = "block";
+              y.style.display = "none";
+              document.getElementById("myBtn").value = "Clickddd";
+          } else {
+              x.style.display = "none";
+              y.style.display = "block";
+              document.getElementById("myBtn").value = "Show Less Comments";
+          }
+      }
+</script>
+
+{% endblock %}

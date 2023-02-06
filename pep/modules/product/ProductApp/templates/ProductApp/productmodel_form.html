@@ -1,0 +1,84 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/create.css' %}">
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<section class="vh-120 bg-image"
+    style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+    <div class='container'>
+        <div class='row  d-flex justify-content-center'>
+            <div class='col-8 d-flex justify-content-center'>
+                <div class='card rounded my-4' >
+                    <div class='card-body p-0' >
+                        
+                        <form method = "POST" enctype = "multipart/form-data">
+                            {% csrf_token%}
+                            <div class="row g-0 " style="font-family:;">
+                                <div class='fs-5 fw-bold col-6 p-4'>
+                                    <h3 class="fw-normal mb-5" style="color: #4835d4;">General Information</h3>
+                                    {% render_field form.name class="form-control" placeholder="Name" type="text" %}<br>
+                                    {% render_field form.price class="form-control" placeholder="Price" type="text" %}<br>
+                                    {% render_field form.description class="form-control" placeholder="Description" type="text" %}<br>
+                                    {% render_field form.company class="form-control" placeholder="Company" type="text" %}<br>
+                                    <input class='form-control' type="text" placeholder='Tag'  value="" name="tagname">
+                                    <br>
+                                    <input class='form-control' type="text" placeholder='Category'  value="" name="categoryname">
+                                    <br>
+                                    <p class='text-secondary fw-normal'>Image :<div class="d-flex form-group mb-2 ">{{form.image}}</div></p>
+                                    <p class='fw-normal text-secondary'>Manufacturing Date
+                                    <input class='form-control' type="date" value="" name="manufacturing date"> 
+                                    </p>
+                                    <p class='fw-normal text-secondary'>Expiry Date
+                                    <input class='form-control' type="date" value="" name="expiry date"> 
+                                    </p>
+                                </div>
+
+                                <div class='fs-5 p-4 col-6 bg-indigo text-white'>
+                                    <h3 class="fw-normal mb-5">Contact Details</h3>
+                                    {% render_field form.street class="form-control" placeholder="Street" type="text" %}<br>
+                                    {% render_field form.city class="form-control" placeholder="City" type="text" %}<br>
+                                    {% render_field form.state class="form-control" placeholder="State" type="text" %}<br>
+                                    {% render_field form.country class="form-control" placeholder="Country" type="text" %}<br>
+                                    {% render_field form.pin_code class="form-control" placeholder="Pin Code" type="text" %}<br>
+                                    {% render_field form.latitude class="form-control" placeholder="Latitude" type="text" %}<br>
+                                    {% render_field form.longitude class="form-control" placeholder="Longitude" type="text" %}<br>
+                                </div>
+                            </div>
+
+                            <div class='text-center card-footer'>
+                                <input class="my-3 btn btn-success btn-block btn-lg gradient-custom-4 text-body" type = "submit" value ="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+        .gradient-custom-4 {
+            /* fallback for old browsers */
+            background: #84fab0;
+            
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1));
+            
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1))
+            }
+
+    .bg-indigo {
+        background-color: #4835d4;
+        }
+
+</style>
+
+{% endblock %}

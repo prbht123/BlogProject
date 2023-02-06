@@ -98,3 +98,13 @@
 
 </body>
 </html>
+
+ $ajax({
+     type: "POST",
+      url: "{% url 'ProductApp:paymentstatus' pk=id %}",   
+     data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+           text: "this is my test view"},   /* Passing the text data */
+     success:  function(response){
+            alert(response);
+        }
+  });

@@ -1,0 +1,75 @@
+{% extends 'ProductApp/base.html' %}
+{% load static %}
+
+{% block style %}
+{% load static %}
+
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+<div class='container-fluid'>
+    <div class='row d-flex justify-content-center'>
+        <div class='card shadow-lg my-5' style='max-width:20rem'>
+            <div class='card-header text-center '>
+                <h3 class='fw-bold'>Payment</h3>
+            </div>
+            <h4 class='my-2 text-center'>{{ product }}</h4>
+            <h4 class='my-2 text-center'>Total Amount - Rs. {{ amount }}</h4>
+            <div class='card-body'>
+                <div id="paypal-button-container"></div>
+            </div>
+    
+        </div>
+    </div>
+</div>
+
+    <!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AeRsqR1vY9xZmqJHZUAkROeY8KaU8LtshFolBdM5HBxThsWa3Y4CFol8YCm0Q970MLjxpFD-S1-D3Nco&currency=USD"></script>
+
+    <script>
+        var total = '{{ amount }}'
+        console.log(total)
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: parseFloat(total * 0.001).toFixed(2)
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(orderData) {
+                    // Successful capture! For demo purposes:
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    var transaction = orderData.purchase_units[0].payments.captures[0];
+                    alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'ProductApp:paymentstatus' pk=order.id %}",   
+                        data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+                              text: "this is my test view"},   /* Passing the text data */
+                        success:  function(response){
+                               alert(response);
+                               console.log(data)
+                           }
+                     });
+                    location.href = 'http://127.0.0.1:8000/product/orderlist/';
+   
+                });
+            }
+
+        }).render('#paypal-button-container');
+
+    </script>
+
+{% endblock %}
